@@ -5,4 +5,4 @@
 - [ ] I can create Entities
     - [x] Entities have an Identifier
         - [ ] Identifier uniquely identify an entity
-    - [ ] Entities have an EntityType
+    - [x] Entities have an EntityType
