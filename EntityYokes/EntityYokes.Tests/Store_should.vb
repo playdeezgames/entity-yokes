@@ -7,6 +7,9 @@ Public Class Store_should
         Dim sut As IStore = CreateSut()
         Dim actual = sut.CreateEntity()
         actual.ShouldNotBeNull()
+        Should.NotThrow(Sub()
+                            Dim identifier = actual.Identifier
+                        End Sub)
     End Sub
     Private Function CreateSut() As IStore
         Return New Store()
