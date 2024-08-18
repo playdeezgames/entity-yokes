@@ -2,6 +2,6 @@
     Implements IStore(Of TIdentifier)
 
     Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IStore(Of TIdentifier).CreateEntity
-        Return New Entity(Of TIdentifier)()
+        Return New Entity(Of TIdentifier)(entityType)
     End Function
 End Class
