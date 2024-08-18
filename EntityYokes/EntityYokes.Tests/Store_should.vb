@@ -2,9 +2,9 @@ Imports Shouldly
 Imports Xunit
 
 Public MustInherit Class Store_should(Of TIdentifier)
-    <Fact>
-    Sub create_entity_with_identifier_and_entity_type()
-        Const EntityType = "entity-type"
+    <Theory>
+    <InlineData("entity-type")>
+    Sub create_entity_with_identifier_and_entity_type(entityType As String)
         Dim sut As IStore(Of TIdentifier) = CreateSut()
         Dim actual = sut.CreateEntity(EntityType)
         actual.ShouldNotBeNull()
