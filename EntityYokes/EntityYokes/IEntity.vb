@@ -1,3 +1,3 @@
-Public Interface IEntity
-    ReadOnly Property Identifier As Integer
+Public Interface IEntity(Of TIdentifier)
+    ReadOnly Property Identifier As TIdentifier
 End Interface
