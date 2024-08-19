@@ -8,8 +8,4 @@ Public Class EntityRepositoryOfInteger_should
         identifier += 1
         Return result
     End Function
-
-    Protected Overrides Function CreateStore() As IEntityStore(Of Integer)
-        Return Nothing
-    End Function
 End Class

@@ -5,8 +5,4 @@ Public Class EntityRepositoryOfGuid_should
     Protected Overrides Function NextIdentifier() As Guid
         Return Guid.NewGuid
     End Function
-
-    Protected Overrides Function CreateStore() As IEntityStore(Of Guid)
-        Return Nothing
-    End Function
 End Class
