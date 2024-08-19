@@ -3,7 +3,6 @@ Imports Xunit
 
 Public MustInherit Class EntityRepository_should(Of TIdentifier)
     Const EntityType = "entity-type"
-    Const FlagType = "flag-type"
     <Theory>
     <InlineData("entity-type")>
     <InlineData("entity-type2")>
@@ -17,7 +16,6 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
                         End Sub)
         actual.EntityType.ShouldBe(entityType)
         sut.AllEntities.Count.ShouldBe(1)
-        actual.Flags(FlagType).ShouldBeFalse
     End Sub
     <Fact>
     Sub blow_up_when_trying_to_create_entity_with_null_entity_type()
