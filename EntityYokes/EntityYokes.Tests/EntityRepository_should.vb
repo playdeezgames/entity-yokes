@@ -18,6 +18,11 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
         sut.AllEntities.Count.ShouldBe(1)
     End Sub
     <Fact>
+    Sub blow_up_when_trying_to_create_entity_with_null_entity_type()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
+        Should.Throw(Of ArgumentNullException)(Function() sut.CreateEntity(Nothing))
+    End Sub
+    <Fact>
     Sub create_entities_with_different_identifiers()
         Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
         Dim firstEntity = sut.CreateEntity(EntityType)

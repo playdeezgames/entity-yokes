@@ -17,6 +17,9 @@
     End Sub
 
     Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).CreateEntity
+        If entityType Is Nothing Then
+            Throw New ArgumentNullException(NameOf(entityType))
+        End If
         Dim identifier = store.CreateEntity(entityType)
         Return New Entity(Of TIdentifier)(store, identifier)
     End Function
