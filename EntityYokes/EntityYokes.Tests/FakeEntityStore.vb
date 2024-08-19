@@ -1,7 +1,7 @@
 ﻿Friend Class FakeEntityStore(Of TIdentifier)
     Implements IEntityStore(Of TIdentifier)
     Private ReadOnly entityTypes As New Dictionary(Of TIdentifier, String)
-    'Private ReadOnly entityFlags As New Dictionary(Of TIdentifier, HashSet(Of String))
+    Private ReadOnly entityFlags As New Dictionary(Of TIdentifier, HashSet(Of String))
     Private ReadOnly nextEntityIdentifier As Func(Of TIdentifier)
 
     Sub New(nextIdentifier As Func(Of TIdentifier))
@@ -10,6 +10,15 @@
 
     Public Sub DestroyEntity(identifier As TIdentifier) Implements IEntityStore(Of TIdentifier).DestroyEntity
         entityTypes.Remove(identifier)
+    End Sub
+
+    Public Sub SetEntityFlag(identifier As TIdentifier, flagType As String) Implements IEntityStore(Of TIdentifier).SetEntityFlag
+        Dim flags As HashSet(Of String) = Nothing
+        If Not entityFlags.TryGetValue(identifier, flags) Then
+            flags = New HashSet(Of String)
+            entityFlags(identifier) = flags
+        End If
+        flags.Add(flagType)
     End Sub
 
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
@@ -39,6 +48,10 @@
     End Function
 
     Public Function CheckEntityHasFlag(identifier As TIdentifier, flagType As String) As Boolean Implements IEntityStore(Of TIdentifier).CheckEntityHasFlag
-        Return False
+        Dim flags As HashSet(Of String) = Nothing
+        If Not entityFlags.TryGetValue(identifier, flags) Then
+            Return False
+        End If
+        Return flags.Contains(flagType)
     End Function
 End Class

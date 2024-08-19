@@ -15,9 +15,16 @@
         End Get
     End Property
 
-    Public ReadOnly Property Flags(flagType As String) As Boolean Implements IEntity(Of TIdentifier).Flags
+    Public Property Flags(flagType As String) As Boolean Implements IEntity(Of TIdentifier).Flags
         Get
             Return store.CheckEntityHasFlag(Identifier, flagType)
         End Get
+        Set(value As Boolean)
+            If value Then
+                store.SetEntityFlag(Identifier, flagType)
+            Else
+                Throw New NotImplementedException
+            End If
+        End Set
     End Property
 End Class

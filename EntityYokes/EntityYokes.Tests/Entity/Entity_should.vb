@@ -8,6 +8,12 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Flags(FlagType).ShouldBeFalse
     End Sub
+    <Fact>
+    Sub set_a_flag()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        sut.Flags(FlagType) = True
+        sut.Flags(FlagType).ShouldBeTrue
+    End Sub
     Const EntityType = "entity-type"
     Private Function CreateSut() As IEntity(Of TIdentifier)
         Return CreateRepository().CreateEntity(EntityType)
