@@ -34,7 +34,7 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
         actual.Identifier.ShouldBe(entityIdentifier)
     End Sub
     Private Function CreateSut() As IEntityRepository(Of TIdentifier)
-        Return New IEntityRepository(Of TIdentifier)(AddressOf NextIdentifier)
+        Return New EntityRepository(Of TIdentifier)(AddressOf NextIdentifier)
     End Function
     Protected MustOverride Function NextIdentifier() As TIdentifier
 End Class

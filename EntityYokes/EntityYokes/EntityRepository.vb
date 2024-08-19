@@ -1,4 +1,4 @@
-﻿Public Class IEntityRepository(Of TIdentifier)
+﻿Public Class EntityRepository(Of TIdentifier)
     Implements IEntityRepository(Of TIdentifier)
     Private ReadOnly nextIdentifier As Func(Of TIdentifier)
     Private ReadOnly entityTable As New Dictionary(Of TIdentifier, IEntity(Of TIdentifier))
