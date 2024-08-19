@@ -29,11 +29,11 @@
         Return entityType
     End Function
 
-    Public Function EntityExists(identifier As TIdentifier) As Boolean Implements IEntityStore(Of TIdentifier).EntityExists
+    Public Function DoesEntityExist(identifier As TIdentifier) As Boolean Implements IEntityStore(Of TIdentifier).DoesEntityExist
         Return entityTypes.ContainsKey(identifier)
     End Function
 
-    Public Function EntitiesOfType(entityType As String) As IEnumerable(Of TIdentifier) Implements IEntityStore(Of TIdentifier).EntitiesOfType
+    Public Function ListEntitiesOfType(entityType As String) As IEnumerable(Of TIdentifier) Implements IEntityStore(Of TIdentifier).ListEntitiesOfType
         Return entityTypes.Where(Function(x) x.Value = entityType).Select(Function(x) x.Key)
     End Function
 End Class

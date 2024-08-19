@@ -22,13 +22,13 @@
     End Function
 
     Public Function RetrieveEntity(identifier As TIdentifier) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).RetrieveEntity
-        If Not store.EntityExists(identifier) Then
+        If Not store.DoesEntityExist(identifier) Then
             Return Nothing
         End If
         Return New Entity(Of TIdentifier)(store, identifier)
     End Function
 
     Public Function RetrieveEntitiesOfType(entityType As String) As IEnumerable(Of IEntity(Of TIdentifier)) Implements IEntityRepository(Of TIdentifier).RetrieveEntitiesOfType
-        Return store.EntitiesOfType(entityType).Select(Function(x) New Entity(Of TIdentifier)(store, x))
+        Return store.ListEntitiesOfType(entityType).Select(Function(x) New Entity(Of TIdentifier)(store, x))
     End Function
 End Class
