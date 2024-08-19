@@ -14,7 +14,8 @@
     End Property
 
     Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).CreateEntity
-        Dim result = New Entity(Of TIdentifier)(store, store.GetNextIdentifier, entityType)
+        Dim identifier = store.CreateEntity(entityType)
+        Dim result = New Entity(Of TIdentifier)(store, identifier)
         entityTable(result.Identifier) = result
         Return result
     End Function
