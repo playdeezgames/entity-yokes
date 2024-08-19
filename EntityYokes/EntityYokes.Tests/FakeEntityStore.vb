@@ -28,4 +28,8 @@
     Public Function EntityExists(identifier As TIdentifier) As Boolean Implements IEntityStore(Of TIdentifier).EntityExists
         Return entityTypes.ContainsKey(identifier)
     End Function
+
+    Public Function EntitiesOfType(entityType As String) As IEnumerable(Of TIdentifier) Implements IEntityStore(Of TIdentifier).EntitiesOfType
+        Return entityTypes.Where(Function(x) x.Value = entityType).Select(Function(x) x.Key)
+    End Function
 End Class

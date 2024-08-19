@@ -33,6 +33,16 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
         actual.ShouldNotBeNull
         actual.Identifier.ShouldBe(entityIdentifier)
     End Sub
+    <Fact>
+    Sub retrieve_entities_by_entity_type()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
+        sut.RetrieveEntitiesOfType(EntityType).Count.ShouldBe(0)
+        sut.CreateEntity(EntityType)
+        sut.CreateEntity(EntityType)
+        Dim actual = sut.RetrieveEntitiesOfType(EntityType)
+        actual.Count.ShouldBe(2)
+        actual.All(Function(x) x.EntityType = EntityType).ShouldBeTrue
+    End Sub
     Private Function CreateSut() As IEntityRepository(Of TIdentifier)
         Return New EntityRepository(Of TIdentifier)(CreateStore())
     End Function

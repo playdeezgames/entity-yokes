@@ -23,4 +23,8 @@
         End If
         Return New Entity(Of TIdentifier)(store, identifier)
     End Function
+
+    Public Function RetrieveEntitiesOfType(entityType As String) As IEnumerable(Of IEntity(Of TIdentifier)) Implements IEntityRepository(Of TIdentifier).RetrieveEntitiesOfType
+        Return store.EntitiesOfType(entityType).Select(Function(x) New Entity(Of TIdentifier)(store, x))
+    End Function
 End Class
