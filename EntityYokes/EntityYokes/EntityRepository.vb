@@ -1,6 +1,5 @@
 ﻿Public Class EntityRepository(Of TIdentifier)
     Implements IEntityRepository(Of TIdentifier)
-    Private ReadOnly entityTable As New Dictionary(Of TIdentifier, IEntity(Of TIdentifier))
     Private ReadOnly store As IEntityStore(Of TIdentifier)
 
     Public Sub New(store As IEntityStore(Of TIdentifier))
@@ -9,22 +8,19 @@
 
     Public ReadOnly Property AllEntities As IEnumerable(Of IEntity(Of TIdentifier)) Implements IEntityRepository(Of TIdentifier).AllEntities
         Get
-            Return entityTable.Values
+            Return store.ListEntities.Select(Function(x) New Entity(Of TIdentifier)(store, x))
         End Get
     End Property
 
     Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).CreateEntity
         Dim identifier = store.CreateEntity(entityType)
-        Dim result = New Entity(Of TIdentifier)(store, identifier)
-        entityTable(result.Identifier) = result
-        Return result
+        Return New Entity(Of TIdentifier)(store, identifier)
     End Function
 
     Public Function RetrieveEntity(identifier As TIdentifier) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).RetrieveEntity
-        Dim result As IEntity(Of TIdentifier) = Nothing
-        If Not entityTable.TryGetValue(identifier, result) Then
+        If Not store.EntityExists(identifier) Then
             Return Nothing
         End If
-        Return result
+        Return New Entity(Of TIdentifier)(store, identifier)
     End Function
 End Class

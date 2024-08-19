@@ -14,6 +14,7 @@
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
         Dim identifier = GetNextIdentifier()
         entityTypes(identifier) = entityType
+        Return identifier
     End Function
 
     Public Function ListEntities() As IEnumerable(Of TIdentifier) Implements IEntityStore(Of TIdentifier).ListEntities
@@ -26,5 +27,9 @@
             Return Nothing
         End If
         Return entityType
+    End Function
+
+    Public Function EntityExists(identifier As TIdentifier) As Boolean Implements IEntityStore(Of TIdentifier).EntityExists
+        Return entityTypes.ContainsKey(identifier)
     End Function
 End Class
