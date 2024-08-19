@@ -56,9 +56,14 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
         sut.AllEntities.ShouldHaveSingleItem
         sut.DestroyEntity(entity)
         sut.AllEntities.ShouldBeEmpty
-        Should.Throw(Of KeyNotFoundException)(Sub()
-                                                  Dim entityType = entity.EntityType
-                                              End Sub)
+        Should.Throw(Of KeyNotFoundException)(Function() entity.EntityType)
+    End Sub
+    <Fact>
+    Sub not_destroy_entities_with_flags()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
+        Dim entity = sut.CreateEntity(EntityType)
+        entity.Flags("flag-type") = True
+        Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
     End Sub
     Private Function CreateSut() As IEntityRepository(Of TIdentifier)
         Return New EntityRepository(Of TIdentifier)(CreateStore())

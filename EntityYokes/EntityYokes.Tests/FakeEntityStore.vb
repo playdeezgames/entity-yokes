@@ -9,6 +9,9 @@
     End Sub
 
     Public Sub DestroyEntity(identifier As TIdentifier) Implements IEntityStore(Of TIdentifier).DestroyEntity
+        If entityFlags.ContainsKey(identifier) AndAlso entityFlags(identifier).Any Then
+            Throw New InvalidOperationException($"Entity with identifier `{identifier}` has flags.")
+        End If
         entityTypes.Remove(identifier)
     End Sub
 
