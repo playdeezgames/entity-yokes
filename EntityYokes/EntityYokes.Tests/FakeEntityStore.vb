@@ -1,14 +1,14 @@
 ﻿Friend Class FakeEntityStore(Of TIdentifier)
     Implements IEntityStore(Of TIdentifier)
     Private ReadOnly entityTypes As New Dictionary(Of TIdentifier, String)
-    Private ReadOnly nextIdentifier As Func(Of TIdentifier)
+    Private ReadOnly nextEntityIdentifier As Func(Of TIdentifier)
 
     Sub New(nextIdentifier As Func(Of TIdentifier))
-        Me.nextIdentifier = nextIdentifier
+        Me.nextEntityIdentifier = nextIdentifier
     End Sub
 
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
-        Dim identifier = nextIdentifier()
+        Dim identifier = nextEntityIdentifier()
         entityTypes(identifier) = entityType
         Return identifier
     End Function

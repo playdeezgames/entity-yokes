@@ -46,9 +46,9 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
     Private Function CreateSut() As IEntityRepository(Of TIdentifier)
         Return New EntityRepository(Of TIdentifier)(CreateStore())
     End Function
-    Protected MustOverride Function NextIdentifier() As TIdentifier
+    Protected MustOverride Function NextEntityIdentifier() As TIdentifier
     Protected Function CreateStore() As IEntityStore(Of TIdentifier)
-        Return New FakeEntityStore(Of TIdentifier)(AddressOf NextIdentifier)
+        Return New FakeEntityStore(Of TIdentifier)(AddressOf NextEntityIdentifier)
     End Function
 End Class
 
