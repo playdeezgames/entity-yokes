@@ -43,6 +43,18 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
         actual.Count.ShouldBe(2)
         actual.All(Function(x) x.EntityType = EntityType).ShouldBeTrue
     End Sub
+    <Fact>
+    Sub destroy_entity()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
+        Dim entity = sut.CreateEntity(EntityType)
+        entity.ShouldNotBeNull
+        sut.AllEntities.ShouldHaveSingleItem
+        sut.DestroyEntity(entity)
+        sut.AllEntities.ShouldBeEmpty
+        Should.Throw(Of KeyNotFoundException)(Sub()
+                                                  Dim entityType = entity.EntityType
+                                              End Sub)
+    End Sub
     Private Function CreateSut() As IEntityRepository(Of TIdentifier)
         Return New EntityRepository(Of TIdentifier)(CreateStore())
     End Function

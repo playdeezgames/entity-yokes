@@ -3,4 +3,5 @@
     ReadOnly Property AllEntities As IEnumerable(Of IEntity(Of TIdentifier))
     Function RetrieveEntity(identifier As TIdentifier) As IEntity(Of TIdentifier)
     Function RetrieveEntitiesOfType(entityType As String) As IEnumerable(Of IEntity(Of TIdentifier))
+    Sub DestroyEntity(entity As IEntity(Of TIdentifier))
 End Interface

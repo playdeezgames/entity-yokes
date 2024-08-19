@@ -7,6 +7,10 @@
         Me.nextEntityIdentifier = nextIdentifier
     End Sub
 
+    Public Sub DestroyEntity(identifier As TIdentifier) Implements IEntityStore(Of TIdentifier).DestroyEntity
+        entityTypes.Remove(identifier)
+    End Sub
+
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
         Dim identifier = nextEntityIdentifier()
         entityTypes(identifier) = entityType
@@ -20,7 +24,7 @@
     Public Function ReadEntityType(identifier As TIdentifier) As String Implements IEntityStore(Of TIdentifier).ReadEntityType
         Dim entityType As String = Nothing
         If Not entityTypes.TryGetValue(identifier, entityType) Then
-            Return Nothing
+            Throw New KeyNotFoundException($"Did not find Entity with Identifier of `{identifier}`")
         End If
         Return entityType
     End Function

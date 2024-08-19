@@ -12,6 +12,10 @@
         End Get
     End Property
 
+    Public Sub DestroyEntity(entity As IEntity(Of TIdentifier)) Implements IEntityRepository(Of TIdentifier).DestroyEntity
+        store.DestroyEntity(entity.Identifier)
+    End Sub
+
     Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).CreateEntity
         Dim identifier = store.CreateEntity(entityType)
         Return New Entity(Of TIdentifier)(store, identifier)
