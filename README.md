@@ -2,7 +2,8 @@
 
 # Requirements
 
-- [ ] I can create Entities
+- [x] I can create Entities
     - [x] Entities have an Identifier
-        - [ ] Identifier uniquely identify an entity
+        - [x] Identifier uniquely identify an entity
     - [x] Entities have an EntityType
+- [ ] I can retrieve all Entities
