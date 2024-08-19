@@ -1,8 +1,11 @@
 ﻿Public Class EntityRepository(Of TIdentifier)
     Implements IEntityRepository(Of TIdentifier)
     Private ReadOnly nextIdentifier As Func(Of TIdentifier)
+    'Private ReadOnly entityCreator As Func(Of String, TIdentifier)
+    'Private ReadOnly entityReader As Func(Of TIdentifier, IEntity(Of TIdentifier))
+    'Private ReadOnly entityLister As Func(Of IEnumerable(Of TIdentifier))
     Private ReadOnly entityTable As New Dictionary(Of TIdentifier, IEntity(Of TIdentifier))
-    Public Sub New(nextIdentifier As Func(Of TIdentifier))
+    Public Sub New(store As IEntityStore(Of TIdentifier), nextIdentifier As Func(Of TIdentifier))
         Me.nextIdentifier = nextIdentifier
     End Sub
 
