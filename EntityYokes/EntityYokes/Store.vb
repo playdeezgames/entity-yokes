@@ -17,4 +17,12 @@
         entityTable(result.Identifier) = result
         Return result
     End Function
+
+    Public Function RetrieveEntity(identifier As TIdentifier) As IEntity(Of TIdentifier) Implements IStore(Of TIdentifier).RetrieveEntity
+        Dim result As IEntity(Of TIdentifier) = Nothing
+        If Not entityTable.TryGetValue(identifier, result) Then
+            Return Nothing
+        End If
+        Return result
+    End Function
 End Class

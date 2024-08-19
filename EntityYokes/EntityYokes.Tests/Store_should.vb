@@ -25,6 +25,15 @@ Public MustInherit Class Store_should(Of TIdentifier)
         firstEntity.Identifier.ShouldNotBe(secondEntity.Identifier)
         sut.AllEntities.Count.ShouldBe(2)
     End Sub
+    <Fact>
+    Sub retrieve_entity_by_identifier()
+        Const EntityType = "entity-type"
+        Dim sut As IStore(Of TIdentifier) = CreateSut()
+        Dim entityIdentifier = sut.CreateEntity(EntityType).Identifier
+        Dim actual = sut.RetrieveEntity(entityIdentifier)
+        actual.ShouldNotBeNull
+        actual.Identifier.shouldBe(entityIdentifier)
+    End Sub
     Private Function CreateSut() As IStore(Of TIdentifier)
         Return New Store(Of TIdentifier)(AddressOf NextIdentifier)
     End Function
