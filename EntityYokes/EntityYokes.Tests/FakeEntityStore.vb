@@ -1,6 +1,7 @@
 ﻿Friend Class FakeEntityStore(Of TIdentifier)
     Implements IEntityStore(Of TIdentifier)
     Private ReadOnly entityTypes As New Dictionary(Of TIdentifier, String)
+    'Private ReadOnly entityFlags As New Dictionary(Of TIdentifier, HashSet(Of String))
     Private ReadOnly nextEntityIdentifier As Func(Of TIdentifier)
 
     Sub New(nextIdentifier As Func(Of TIdentifier))
@@ -35,5 +36,9 @@
 
     Public Function ListEntitiesOfType(entityType As String) As IEnumerable(Of TIdentifier) Implements IEntityStore(Of TIdentifier).ListEntitiesOfType
         Return entityTypes.Where(Function(x) x.Value = entityType).Select(Function(x) x.Key)
+    End Function
+
+    Public Function CheckEntityHasFlag(identifier As TIdentifier, flagType As String) As Boolean Implements IEntityStore(Of TIdentifier).CheckEntityHasFlag
+        Return False
     End Function
 End Class

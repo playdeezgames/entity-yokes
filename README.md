@@ -9,5 +9,9 @@
 - [x] I can retrieve all Entities
 - [x] I can retrieve one entity by identifier
 - [x] I can retrieve entities by entity type
-- [ ] I can destroy and entity
-    - [ ] Entity must be empty to destroy it
+- [x] I can destroy and entity
+- [ ] I can check a flag on an entity
+- [ ] I can set a flag on an entity
+- [ ] I can retrieve all flags for an entity
+- [ ] I can clear a flag on an entity
+- [ ] I am prevented from destroying an entity with flags

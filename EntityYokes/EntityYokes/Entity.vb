@@ -14,4 +14,10 @@
             Return store.ReadEntityType(Identifier)
         End Get
     End Property
+
+    Public ReadOnly Property Flags(flagType As String) As Boolean Implements IEntity(Of TIdentifier).Flags
+        Get
+            Return store.CheckEntityHasFlag(Identifier, flagType)
+        End Get
+    End Property
 End Class
