@@ -1,12 +1,13 @@
 Imports Shouldly
 Imports Xunit
 
-Public MustInherit Class Store_should(Of TIdentifier)
+Public MustInherit Class EntityRepository_should(Of TIdentifier)
+    Const EntityType = "entity-type"
     <Theory>
     <InlineData("entity-type")>
     <InlineData("entity-type2")>
     Sub create_entity_with_identifier_and_entity_type(entityType As String)
-        Dim sut As IStore(Of TIdentifier) = CreateSut()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
         sut.AllEntities.Count.ShouldBe(0)
         Dim actual = sut.CreateEntity(entityType)
         actual.ShouldNotBeNull()
@@ -18,8 +19,7 @@ Public MustInherit Class Store_should(Of TIdentifier)
     End Sub
     <Fact>
     Sub create_entities_with_different_identifiers()
-        Const EntityType = "entity-type"
-        Dim sut As IStore(Of TIdentifier) = CreateSut()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
         Dim firstEntity = sut.CreateEntity(EntityType)
         Dim secondEntity = sut.CreateEntity(EntityType)
         firstEntity.Identifier.ShouldNotBe(secondEntity.Identifier)
@@ -27,15 +27,14 @@ Public MustInherit Class Store_should(Of TIdentifier)
     End Sub
     <Fact>
     Sub retrieve_entity_by_identifier()
-        Const EntityType = "entity-type"
-        Dim sut As IStore(Of TIdentifier) = CreateSut()
+        Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
         Dim entityIdentifier = sut.CreateEntity(EntityType).Identifier
         Dim actual = sut.RetrieveEntity(entityIdentifier)
         actual.ShouldNotBeNull
-        actual.Identifier.shouldBe(entityIdentifier)
+        actual.Identifier.ShouldBe(entityIdentifier)
     End Sub
-    Private Function CreateSut() As IStore(Of TIdentifier)
-        Return New Store(Of TIdentifier)(AddressOf NextIdentifier)
+    Private Function CreateSut() As IEntityRepository(Of TIdentifier)
+        Return New IEntityRepository(Of TIdentifier)(AddressOf NextIdentifier)
     End Function
     Protected MustOverride Function NextIdentifier() As TIdentifier
 End Class

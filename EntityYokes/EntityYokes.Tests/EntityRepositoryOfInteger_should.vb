@@ -1,5 +1,5 @@
-﻿Public Class StoreOfInteger_should
-    Inherits Store_should(Of Integer)
+﻿Public Class EntityRepositoryOfInteger_should
+    Inherits EntityRepository_should(Of Integer)
     Private identifier As Integer = 0
 
     Protected Overrides Function NextIdentifier() As Integer

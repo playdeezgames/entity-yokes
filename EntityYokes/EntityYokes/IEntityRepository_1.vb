@@ -1,24 +1,24 @@
-﻿Public Class Store(Of TIdentifier)
-    Implements IStore(Of TIdentifier)
+﻿Public Class IEntityRepository(Of TIdentifier)
+    Implements IEntityRepository(Of TIdentifier)
     Private ReadOnly nextIdentifier As Func(Of TIdentifier)
     Private ReadOnly entityTable As New Dictionary(Of TIdentifier, IEntity(Of TIdentifier))
     Public Sub New(nextIdentifier As Func(Of TIdentifier))
         Me.nextIdentifier = nextIdentifier
     End Sub
 
-    Public ReadOnly Property AllEntities As IEnumerable(Of IEntity(Of TIdentifier)) Implements IStore(Of TIdentifier).AllEntities
+    Public ReadOnly Property AllEntities As IEnumerable(Of IEntity(Of TIdentifier)) Implements IEntityRepository(Of TIdentifier).AllEntities
         Get
             Return entityTable.Values
         End Get
     End Property
 
-    Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IStore(Of TIdentifier).CreateEntity
+    Public Function CreateEntity(entityType As String) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).CreateEntity
         Dim result = New Entity(Of TIdentifier)(nextIdentifier(), entityType)
         entityTable(result.Identifier) = result
         Return result
     End Function
 
-    Public Function RetrieveEntity(identifier As TIdentifier) As IEntity(Of TIdentifier) Implements IStore(Of TIdentifier).RetrieveEntity
+    Public Function RetrieveEntity(identifier As TIdentifier) As IEntity(Of TIdentifier) Implements IEntityRepository(Of TIdentifier).RetrieveEntity
         Dim result As IEntity(Of TIdentifier) = Nothing
         If Not entityTable.TryGetValue(identifier, result) Then
             Return Nothing
