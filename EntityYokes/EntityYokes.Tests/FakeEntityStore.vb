@@ -7,12 +7,8 @@
         Me.nextIdentifier = nextIdentifier
     End Sub
 
-    Public Function GetNextIdentifier() As TIdentifier Implements IEntityStore(Of TIdentifier).GetNextIdentifier
-        Return nextIdentifier()
-    End Function
-
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
-        Dim identifier = GetNextIdentifier()
+        Dim identifier = nextIdentifier()
         entityTypes(identifier) = entityType
         Return identifier
     End Function
