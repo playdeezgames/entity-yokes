@@ -85,4 +85,16 @@
     Public Function ListEntityStatistics(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityStatistics
         Return Array.Empty(Of String)
     End Function
+
+    Public Function ReadEntityMetadata(identifier As TIdentifier, metadataType As String) As String Implements IEntityStore(Of TIdentifier).ReadEntityMetadata
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ReadEntityCounter(identifier As TIdentifier, counterType As String) As Integer? Implements IEntityStore(Of TIdentifier).ReadEntityCounter
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ReadEntityStatistic(identfier As TIdentifier, statisticType As String) As Double? Implements IEntityStore(Of TIdentifier).ReadEntityStatistic
+        Throw New NotImplementedException()
+    End Function
 End Class

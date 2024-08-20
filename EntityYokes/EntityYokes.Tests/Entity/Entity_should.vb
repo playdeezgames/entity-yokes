@@ -3,25 +3,32 @@ Imports Xunit
 
 Public MustInherit Class Entity_should(Of TIdentifier)
     Const FlagType = "flag-type"
+    Const MetadataType = "metadata-type"
+    Const CounterType = "counter-type"
+    Const StatisticType = "statistic-type"
     <Fact>
     Sub initially_have_no_flags()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Flags.ShouldBeEmpty
+        sut.Flag(FlagType).ShouldBeFalse
     End Sub
     <Fact>
     Sub initially_have_no_metadatas()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Metadatas.ShouldBeEmpty
+        sut.Metadata(MetadataType).ShouldBeNull
     End Sub
     <Fact>
     Sub initially_have_no_counters()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Counters.ShouldBeEmpty
+        sut.Counter(CounterType).ShouldBeNull
     End Sub
     <Fact>
     Sub initially_have_no_statistics()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Statistics.ShouldBeEmpty
+        sut.Statistic(StatisticType).ShouldBeNull
     End Sub
     <Fact>
     Sub set_a_flag()

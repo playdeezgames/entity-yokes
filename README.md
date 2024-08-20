@@ -29,13 +29,13 @@
 - [ ] I can check for a counter on an entity with a key
 - [ ] I can retrieve a counter from an entity by key
 - [ ] I can update counter of an entity by key
-- [ ] I can list counter keys for an entity
+- [x] I can list counter keys for an entity
 - [ ] I can clear a counter for an entity by key
 - [ ] I can set a statistic on an entity with a string key and a double value
 - [ ] I can check for a statistic on an entity with a key
 - [ ] I can retrieve a statistic from an entity by key
 - [ ] I can update statistic by key for statistic
-- [ ] I can list statistic keys for an entity
+- [x] I can list statistic keys for an entity
 - [ ] I can clear a statistic for an entity by key 
 - [ ] I can create yokes of a yoke type from an entity to another entity
     - [ ] The from and to entities may be the same

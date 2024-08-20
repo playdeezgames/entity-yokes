@@ -51,4 +51,22 @@
             Return store.ListEntityStatistics(Identifier)
         End Get
     End Property
+
+    Public ReadOnly Property Metadata(metadataType As String) As String Implements IEntity(Of TIdentifier).Metadata
+        Get
+            Return Nothing
+        End Get
+    End Property
+
+    Public ReadOnly Property Counter(counterType As String) As Integer? Implements IEntity(Of TIdentifier).Counter
+        Get
+            Return Nothing
+        End Get
+    End Property
+
+    Public ReadOnly Property Statistic(statisticType As String) As Double? Implements IEntity(Of TIdentifier).Statistic
+        Get
+            Return Nothing
+        End Get
+    End Property
 End Class

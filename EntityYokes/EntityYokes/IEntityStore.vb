@@ -12,4 +12,7 @@
     Function ListEntityMetadatas(identifier As TIdentifier) As IEnumerable(Of String)
     Function ListEntityCounters(identifier As TIdentifier) As IEnumerable(Of String)
     Function ListEntityStatistics(identifier As TIdentifier) As IEnumerable(Of String)
+    Function ReadEntityMetadata(identifier As TIdentifier, metadataType As String) As String
+    Function ReadEntityCounter(identifier As TIdentifier, counterType As String) As Integer?
+    Function ReadEntityStatistic(identfier As TIdentifier, statisticType As String) As Double?
 End Interface
