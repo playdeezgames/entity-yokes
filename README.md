@@ -21,19 +21,19 @@
 - [x] I can clear a flag on an entity
 - [ ] I can set a metadata on an entity with a string key and string value
 - [ ] I can check for a metadata on an entity by key
-- [ ] I can retrieve a metadata from an entity by key
+- [x] I can retrieve a metadata from an entity by key
 - [ ] I can update metadata of an entity by key
 - [x] I can list metadata keys for an entity
 - [ ] I can clear a metadata by key for an entity
 - [ ] I can set a counter on an entity with a string key and integer value
 - [ ] I can check for a counter on an entity with a key
-- [ ] I can retrieve a counter from an entity by key
+- [x] I can retrieve a counter from an entity by key
 - [ ] I can update counter of an entity by key
 - [x] I can list counter keys for an entity
 - [ ] I can clear a counter for an entity by key
 - [ ] I can set a statistic on an entity with a string key and a double value
 - [ ] I can check for a statistic on an entity with a key
-- [ ] I can retrieve a statistic from an entity by key
+- [x] I can retrieve a statistic from an entity by key
 - [ ] I can update statistic by key for statistic
 - [x] I can list statistic keys for an entity
 - [ ] I can clear a statistic for an entity by key 

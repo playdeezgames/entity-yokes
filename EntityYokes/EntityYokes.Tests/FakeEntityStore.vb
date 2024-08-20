@@ -87,14 +87,14 @@
     End Function
 
     Public Function ReadEntityMetadata(identifier As TIdentifier, metadataType As String) As String Implements IEntityStore(Of TIdentifier).ReadEntityMetadata
-        Throw New NotImplementedException()
+        Return Nothing
     End Function
 
     Public Function ReadEntityCounter(identifier As TIdentifier, counterType As String) As Integer? Implements IEntityStore(Of TIdentifier).ReadEntityCounter
-        Throw New NotImplementedException()
+        Return Nothing
     End Function
 
     Public Function ReadEntityStatistic(identfier As TIdentifier, statisticType As String) As Double? Implements IEntityStore(Of TIdentifier).ReadEntityStatistic
-        Throw New NotImplementedException()
+        Return Nothing
     End Function
 End Class

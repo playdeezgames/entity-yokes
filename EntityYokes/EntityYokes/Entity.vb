@@ -54,19 +54,19 @@
 
     Public ReadOnly Property Metadata(metadataType As String) As String Implements IEntity(Of TIdentifier).Metadata
         Get
-            Return Nothing
+            Return store.ReadEntityMetadata(Identifier, metadataType)
         End Get
     End Property
 
     Public ReadOnly Property Counter(counterType As String) As Integer? Implements IEntity(Of TIdentifier).Counter
         Get
-            Return Nothing
+            Return store.ReadEntityCounter(Identifier, counterType)
         End Get
     End Property
 
     Public ReadOnly Property Statistic(statisticType As String) As Double? Implements IEntity(Of TIdentifier).Statistic
         Get
-            Return Nothing
+            Return store.ReadEntityStatistic(Identifier, statisticType)
         End Get
     End Property
 End Class
