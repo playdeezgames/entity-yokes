@@ -77,4 +77,12 @@
     Public Function ListEntityMetadatas(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityMetadatas
         Return Array.Empty(Of String)
     End Function
+
+    Public Function ListEntityCounters(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityCounters
+        Return Array.Empty(Of String)
+    End Function
+
+    Public Function ListEntityStatistics(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityStatistics
+        Return Array.Empty(Of String)
+    End Function
 End Class

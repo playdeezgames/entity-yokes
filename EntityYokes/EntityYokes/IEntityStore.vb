@@ -10,4 +10,6 @@
     Function CheckEntityHasFlag(identifier As TIdentifier, flagType As String) As Boolean
     Function ListEntityFlags(identifier As TIdentifier) As IEnumerable(Of String)
     Function ListEntityMetadatas(identifier As TIdentifier) As IEnumerable(Of String)
+    Function ListEntityCounters(identifier As TIdentifier) As IEnumerable(Of String)
+    Function ListEntityStatistics(identifier As TIdentifier) As IEnumerable(Of String)
 End Interface

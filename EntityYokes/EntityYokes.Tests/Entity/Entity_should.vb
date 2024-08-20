@@ -14,6 +14,16 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         sut.Metadatas.ShouldBeEmpty
     End Sub
     <Fact>
+    Sub initially_have_no_counters()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        sut.Counters.ShouldBeEmpty
+    End Sub
+    <Fact>
+    Sub initially_have_no_statistics()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        sut.Statistics.ShouldBeEmpty
+    End Sub
+    <Fact>
     Sub set_a_flag()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Flag(FlagType) = True

@@ -39,4 +39,16 @@
             Return store.ListEntityMetadatas(Identifier)
         End Get
     End Property
+
+    Public ReadOnly Property Counters As IEnumerable(Of String) Implements IEntity(Of TIdentifier).Counters
+        Get
+            Return store.ListEntityCounters(Identifier)
+        End Get
+    End Property
+
+    Public ReadOnly Property Statistics As IEnumerable(Of String) Implements IEntity(Of TIdentifier).Statistics
+        Get
+            Return store.ListEntityStatistics(Identifier)
+        End Get
+    End Property
 End Class
