@@ -23,7 +23,7 @@
             If value Then
                 store.SetEntityFlag(Identifier, flagType)
             Else
-                Throw New NotImplementedException
+                store.ClearEntityFlag(Identifier, flagType)
             End If
         End Set
     End Property

@@ -18,7 +18,7 @@
 - [x] I can set a flag on an entity
 - [x] I am prevented from destroying an entity with flags
 - [x] I can retrieve all flags for an entity
-- [ ] I can clear a flag on an entity
+- [x] I can clear a flag on an entity
 - [ ] I can set a metadata on an entity with a string key and string value
 - [ ] I can check for a metadata on an entity by key
 - [ ] I can retrieve a metadata from an entity by key

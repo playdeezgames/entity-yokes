@@ -25,6 +25,13 @@
         flags.Add(flagType)
     End Sub
 
+    Public Sub ClearEntityFlag(identifier As TIdentifier, flagType As String) Implements IEntityStore(Of TIdentifier).ClearEntityFlag
+        Dim flags As HashSet(Of String) = Nothing
+        If entityFlags.TryGetValue(identifier, flags) Then
+            flags.Remove(flagType)
+        End If
+    End Sub
+
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
         Dim identifier = nextEntityIdentifier()
         entityTypes(identifier) = entityType
