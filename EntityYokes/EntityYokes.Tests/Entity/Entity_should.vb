@@ -9,6 +9,11 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         sut.Flags.ShouldBeEmpty
     End Sub
     <Fact>
+    Sub initially_have_no_metadatas()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        sut.Metadatas.ShouldBeEmpty
+    End Sub
+    <Fact>
     Sub set_a_flag()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Flag(FlagType) = True

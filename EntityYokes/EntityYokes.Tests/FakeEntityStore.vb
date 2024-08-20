@@ -73,4 +73,8 @@
         End If
         Return flags
     End Function
+
+    Public Function ListEntityMetadatas(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityMetadatas
+        Return Array.Empty(Of String)
+    End Function
 End Class

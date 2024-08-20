@@ -33,4 +33,10 @@
             Return store.ListEntityFlags(Identifier)
         End Get
     End Property
+
+    Public ReadOnly Property Metadatas As IEnumerable(Of String) Implements IEntity(Of TIdentifier).Metadatas
+        Get
+            Return store.ListEntityMetadatas(Identifier)
+        End Get
+    End Property
 End Class

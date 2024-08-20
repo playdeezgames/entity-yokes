@@ -23,7 +23,7 @@
 - [ ] I can check for a metadata on an entity by key
 - [ ] I can retrieve a metadata from an entity by key
 - [ ] I can update metadata of an entity by key
-- [ ] I can list metadata keys for an entity
+- [x] I can list metadata keys for an entity
 - [ ] I can clear a metadata by key for an entity
 - [ ] I can set a counter on an entity with a string key and integer value
 - [ ] I can check for a counter on an entity with a key
