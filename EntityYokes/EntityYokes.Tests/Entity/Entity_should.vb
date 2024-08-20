@@ -111,7 +111,7 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier)
         yoke.ShouldNotBeNull
         'yoke.FromEntity.ShouldBe(firstEntity)
         'yoke.ToEntity.ShouldBe(secondEntity)
-        'yoke.YokeType.shouldbe(YokeType)
+        yoke.YokeType.shouldbe(YokeType)
     End Sub
     Const EntityType = "entity-type"
     Private Function CreateSut() As IEntity(Of TEntityIdentifier)
