@@ -25,6 +25,13 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         sut.Metadata(MetadataType) = value
         sut.Metadata(MetadataType).ShouldBe(value)
         sut.Metadatas.ShouldHaveSingleItem
+        Const otherValue = "other value"
+        sut.Metadata(MetadataType) = otherValue
+        sut.Metadata(MetadataType).ShouldBe(otherValue)
+        sut.Metadatas.ShouldHaveSingleItem
+        sut.Metadata(MetadataType) = Nothing
+        sut.Metadata(MetadataType).ShouldBeNull
+        sut.Metadatas.ShouldBeEmpty
     End Sub
     <Fact>
     Sub initially_have_no_counters()
@@ -39,6 +46,13 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         sut.Counter(CounterType) = value
         sut.Counter(CounterType).ShouldBe(value)
         sut.Counters.ShouldHaveSingleItem
+        Const otherValue = 2
+        sut.Counter(CounterType) = otherValue
+        sut.Counter(CounterType).ShouldBe(otherValue)
+        sut.Counters.ShouldHaveSingleItem
+        sut.Counter(CounterType) = Nothing
+        sut.Counter(CounterType).ShouldBeNull
+        sut.Counters.ShouldBeEmpty
     End Sub
     <Fact>
     Sub initially_have_no_statistics()
@@ -53,6 +67,13 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         sut.Statistic(StatisticType) = value
         sut.Statistic(StatisticType).ShouldBe(value)
         sut.Statistics.ShouldHaveSingleItem
+        Const otherValue = 2.0
+        sut.Statistic(StatisticType) = otherValue
+        sut.Statistic(StatisticType).ShouldBe(otherValue)
+        sut.Statistics.ShouldHaveSingleItem
+        sut.Statistic(StatisticType) = Nothing
+        sut.Statistic(StatisticType).ShouldBeNull
+        sut.Statistics.ShouldBeEmpty
     End Sub
     <Fact>
     Sub set_a_flag()

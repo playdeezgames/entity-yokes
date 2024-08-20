@@ -1,6 +1,4 @@
-﻿Imports Newtonsoft.Json.Linq
-
-Friend Class FakeEntityStore(Of TIdentifier)
+﻿Friend Class FakeEntityStore(Of TIdentifier)
     Implements IEntityStore(Of TIdentifier)
     Private ReadOnly entityTypes As New Dictionary(Of TIdentifier, String)
     Private ReadOnly entityFlags As New Dictionary(Of TIdentifier, HashSet(Of String))
@@ -62,6 +60,27 @@ Friend Class FakeEntityStore(Of TIdentifier)
             entityStatistics(identifier) = statistics
         End If
         statistics(statisticType) = value
+    End Sub
+
+    Public Sub ClearEntityMetadata(identifier As TIdentifier, metadataType As String) Implements IEntityStore(Of TIdentifier).ClearEntityMetadata
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        If entityMetadatas.TryGetValue(identifier, metadatas) Then
+            metadatas.Remove(metadataType)
+        End If
+    End Sub
+
+    Public Sub ClearEntityCounter(identifier As TIdentifier, counterType As String) Implements IEntityStore(Of TIdentifier).ClearEntityCounter
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        If entityCounters.TryGetValue(identifier, counters) Then
+            counters.Remove(counterType)
+        End If
+    End Sub
+
+    Public Sub ClearEntityStatistic(identifier As TIdentifier, statisticType As String) Implements IEntityStore(Of TIdentifier).ClearEntityStatistic
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        If entityStatistics.TryGetValue(identifier, statistics) Then
+            statistics.Remove(statisticType)
+        End If
     End Sub
 
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity

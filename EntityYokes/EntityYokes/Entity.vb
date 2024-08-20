@@ -60,7 +60,7 @@
             If value IsNot Nothing Then
                 store.WriteEntityMetadata(Identifier, metadataType, value)
             Else
-                Throw New NotImplementedException
+                store.ClearEntityMetadata(Identifier, metadataType)
             End If
         End Set
     End Property
@@ -73,7 +73,7 @@
             If value IsNot Nothing Then
                 store.WriteEntityCounter(Identifier, counterType, value.Value)
             Else
-                Throw New NotImplementedException
+                store.ClearEntityCounter(Identifier, counterType)
             End If
         End Set
     End Property
@@ -86,7 +86,7 @@
             If value IsNot Nothing Then
                 store.WriteEntityStatistic(Identifier, statisticType, value.Value)
             Else
-                Throw New NotImplementedException
+                store.ClearEntityStatistic(Identifier, statisticType)
             End If
         End Set
     End Property

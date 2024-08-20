@@ -19,24 +19,21 @@
 - [x] I am prevented from destroying an entity with flags
 - [x] I can retrieve all flags for an entity
 - [x] I can clear a flag on an entity
-- [ ] I can set a metadata on an entity with a string key and string value
-- [ ] I can check for a metadata on an entity by key
+- [x] I can set a metadata on an entity with a string key and string value
 - [x] I can retrieve a metadata from an entity by key
-- [ ] I can update metadata of an entity by key
+- [x] I can update metadata of an entity by key
 - [x] I can list metadata keys for an entity
-- [ ] I can clear a metadata by key for an entity
-- [ ] I can set a counter on an entity with a string key and integer value
-- [ ] I can check for a counter on an entity with a key
+- [x] I can clear a metadata by key for an entity
+- [x] I can set a counter on an entity with a string key and integer value
 - [x] I can retrieve a counter from an entity by key
-- [ ] I can update counter of an entity by key
+- [x] I can update counter of an entity by key
 - [x] I can list counter keys for an entity
-- [ ] I can clear a counter for an entity by key
-- [ ] I can set a statistic on an entity with a string key and a double value
-- [ ] I can check for a statistic on an entity with a key
+- [x] I can clear a counter for an entity by key
+- [x] I can set a statistic on an entity with a string key and a double value
 - [x] I can retrieve a statistic from an entity by key
-- [ ] I can update statistic by key for statistic
+- [x] I can update statistic by key for statistic
 - [x] I can list statistic keys for an entity
-- [ ] I can clear a statistic for an entity by key 
+- [x] I can clear a statistic for an entity by key 
 - [ ] I can create yokes of a yoke type from an entity to another entity
     - [ ] The from and to entities may be the same
     - [ ] Yokes are unique over yoke type, from entity, and to entity
@@ -47,21 +44,18 @@
     - [ ] Clear flag
 - [ ] Yokes have metadatas
     - [ ] Set metadata
-    - [ ] Check for metadata
     - [ ] Read metadata
     - [ ] Update metadata
     - [ ] List metadata keys
     - [ ] Clear metadata
 - [ ] Yokes have counters
     - [ ] Set counter
-    - [ ] Check for counter
     - [ ] Read counter
     - [ ] Update counter
     - [ ] List counter keys
     - [ ] Clear counter
 - [ ] Yokes have statistics
     - [ ] Set statistic
-    - [ ] Check for statistic
     - [ ] Read statistic
     - [ ] Update statistic
     - [ ] List statistic keys
