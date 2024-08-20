@@ -101,6 +101,18 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier)
         sut.Flag(FlagType) = False
         sut.Flag(FlagType).ShouldBeFalse
     End Sub
+    <Fact>
+    Sub yoke_to_another_entity()
+        Dim repository = CreateRepository()
+        Dim firstEntity = repository.CreateEntity(EntityType)
+        Dim secondEntity = repository.CreateEntity(EntityType)
+        Const YokeType = "yoke-type"
+        Dim yoke = firstEntity.CreateYoke(YokeType, secondEntity)
+        yoke.ShouldNotBeNull
+        'yoke.FromEntity.ShouldBe(firstEntity)
+        'yoke.ToEntity.ShouldBe(secondEntity)
+        'yoke.YokeType.shouldbe(YokeType)
+    End Sub
     Const EntityType = "entity-type"
     Private Function CreateSut() As IEntity(Of TEntityIdentifier)
         Return CreateRepository().CreateEntity(EntityType)

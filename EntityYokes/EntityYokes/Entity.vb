@@ -6,6 +6,10 @@
         Me.Identifier = identifier
     End Sub
 
+    Public Function CreateYoke(yokeType As String, yokedEntity As IEntity(Of TEntityIdentifier)) As IYoke Implements IEntity(Of TEntityIdentifier).CreateYoke
+        Return New Yoke()
+    End Function
+
     Private ReadOnly store As IEntityStore(Of TEntityIdentifier)
     Public ReadOnly Property Identifier As TEntityIdentifier Implements IEntity(Of TEntityIdentifier).Identifier
 
