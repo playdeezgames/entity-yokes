@@ -6,7 +6,7 @@ Public MustInherit Class Entity_should(Of TIdentifier)
     <Fact>
     Sub initially_have_no_flags()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
-        sut.Flag(FlagType).ShouldBeFalse
+        sut.Flags.ShouldBeEmpty
     End Sub
     <Fact>
     Sub set_a_flag()
