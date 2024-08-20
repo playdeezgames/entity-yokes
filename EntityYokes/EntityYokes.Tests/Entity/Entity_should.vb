@@ -19,16 +19,40 @@ Public MustInherit Class Entity_should(Of TIdentifier)
         sut.Metadata(MetadataType).ShouldBeNull
     End Sub
     <Fact>
+    Sub set_metadata()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        Const value = "value"
+        sut.Metadata(MetadataType) = value
+        sut.Metadata(MetadataType).ShouldBe(value)
+        sut.Metadatas.ShouldHaveSingleItem
+    End Sub
+    <Fact>
     Sub initially_have_no_counters()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Counters.ShouldBeEmpty
         sut.Counter(CounterType).ShouldBeNull
     End Sub
     <Fact>
+    Sub set_counter()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        Const value = 1
+        sut.Counter(CounterType) = value
+        sut.Counter(CounterType).ShouldBe(value)
+        sut.Counters.ShouldHaveSingleItem
+    End Sub
+    <Fact>
     Sub initially_have_no_statistics()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         sut.Statistics.ShouldBeEmpty
         sut.Statistic(StatisticType).ShouldBeNull
+    End Sub
+    <Fact>
+    Sub set_statistic()
+        Dim sut As IEntity(Of TIdentifier) = CreateSut()
+        Const value = 1.0
+        sut.Statistic(StatisticType) = value
+        sut.Statistic(StatisticType).ShouldBe(value)
+        sut.Statistics.ShouldHaveSingleItem
     End Sub
     <Fact>
     Sub set_a_flag()

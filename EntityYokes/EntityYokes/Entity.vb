@@ -52,21 +52,42 @@
         End Get
     End Property
 
-    Public ReadOnly Property Metadata(metadataType As String) As String Implements IEntity(Of TIdentifier).Metadata
+    Public Property Metadata(metadataType As String) As String Implements IEntity(Of TIdentifier).Metadata
         Get
             Return store.ReadEntityMetadata(Identifier, metadataType)
         End Get
+        Set(value As String)
+            If value IsNot Nothing Then
+                store.WriteEntityMetadata(Identifier, metadataType, value)
+            Else
+                Throw New NotImplementedException
+            End If
+        End Set
     End Property
 
-    Public ReadOnly Property Counter(counterType As String) As Integer? Implements IEntity(Of TIdentifier).Counter
+    Public Property Counter(counterType As String) As Integer? Implements IEntity(Of TIdentifier).Counter
         Get
             Return store.ReadEntityCounter(Identifier, counterType)
         End Get
+        Set(value As Integer?)
+            If value IsNot Nothing Then
+                store.WriteEntityCounter(Identifier, counterType, value.Value)
+            Else
+                Throw New NotImplementedException
+            End If
+        End Set
     End Property
 
-    Public ReadOnly Property Statistic(statisticType As String) As Double? Implements IEntity(Of TIdentifier).Statistic
+    Public Property Statistic(statisticType As String) As Double? Implements IEntity(Of TIdentifier).Statistic
         Get
             Return store.ReadEntityStatistic(Identifier, statisticType)
         End Get
+        Set(value As Double?)
+            If value IsNot Nothing Then
+                store.WriteEntityStatistic(Identifier, statisticType, value.Value)
+            Else
+                Throw New NotImplementedException
+            End If
+        End Set
     End Property
 End Class

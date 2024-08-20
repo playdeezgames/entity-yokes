@@ -2,6 +2,9 @@
     Sub DestroyEntity(identifier As TIdentifier)
     Sub SetEntityFlag(identifier As TIdentifier, flagType As String)
     Sub ClearEntityFlag(identifier As TIdentifier, flagType As String)
+    Sub WriteEntityMetadata(identifier As TIdentifier, metadataType As String, value As String)
+    Sub WriteEntityCounter(identifier As TIdentifier, counterType As String, value As Integer)
+    Sub WriteEntityStatistic(identifier As TIdentifier, statisticType As String, value As Double)
     Function CreateEntity(entityType As String) As TIdentifier
     Function ListEntities() As IEnumerable(Of TIdentifier)
     Function ReadEntityType(identifier As TIdentifier) As String
@@ -14,5 +17,5 @@
     Function ListEntityStatistics(identifier As TIdentifier) As IEnumerable(Of String)
     Function ReadEntityMetadata(identifier As TIdentifier, metadataType As String) As String
     Function ReadEntityCounter(identifier As TIdentifier, counterType As String) As Integer?
-    Function ReadEntityStatistic(identfier As TIdentifier, statisticType As String) As Double?
+    Function ReadEntityStatistic(identifier As TIdentifier, statisticType As String) As Double?
 End Interface

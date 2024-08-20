@@ -1,7 +1,12 @@
-﻿Friend Class FakeEntityStore(Of TIdentifier)
+﻿Imports Newtonsoft.Json.Linq
+
+Friend Class FakeEntityStore(Of TIdentifier)
     Implements IEntityStore(Of TIdentifier)
     Private ReadOnly entityTypes As New Dictionary(Of TIdentifier, String)
     Private ReadOnly entityFlags As New Dictionary(Of TIdentifier, HashSet(Of String))
+    Private ReadOnly entityMetadatas As New Dictionary(Of TIdentifier, Dictionary(Of String, String))
+    Private ReadOnly entityCounters As New Dictionary(Of TIdentifier, Dictionary(Of String, Integer))
+    Private ReadOnly entityStatistics As New Dictionary(Of TIdentifier, Dictionary(Of String, Double))
     Private ReadOnly nextEntityIdentifier As Func(Of TIdentifier)
 
     Sub New(nextIdentifier As Func(Of TIdentifier))
@@ -30,6 +35,33 @@
         If entityFlags.TryGetValue(identifier, flags) Then
             flags.Remove(flagType)
         End If
+    End Sub
+
+    Public Sub WriteEntityMetadata(identifier As TIdentifier, metadataType As String, value As String) Implements IEntityStore(Of TIdentifier).WriteEntityMetadata
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        If Not entityMetadatas.TryGetValue(identifier, metadatas) Then
+            metadatas = New Dictionary(Of String, String)
+            entityMetadatas(identifier) = metadatas
+        End If
+        metadatas(metadataType) = value
+    End Sub
+
+    Public Sub WriteEntityCounter(identifier As TIdentifier, counterType As String, value As Integer) Implements IEntityStore(Of TIdentifier).WriteEntityCounter
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        If Not entityCounters.TryGetValue(identifier, counters) Then
+            counters = New Dictionary(Of String, Integer)
+            entityCounters(identifier) = counters
+        End If
+        counters(counterType) = value
+    End Sub
+
+    Public Sub WriteEntityStatistic(identifier As TIdentifier, statisticType As String, value As Double) Implements IEntityStore(Of TIdentifier).WriteEntityStatistic
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        If Not entityStatistics.TryGetValue(identifier, statistics) Then
+            statistics = New Dictionary(Of String, Double)
+            entityStatistics(identifier) = statistics
+        End If
+        statistics(statisticType) = value
     End Sub
 
     Public Function CreateEntity(entityType As String) As TIdentifier Implements IEntityStore(Of TIdentifier).CreateEntity
@@ -75,26 +107,56 @@
     End Function
 
     Public Function ListEntityMetadatas(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityMetadatas
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        If entityMetadatas.TryGetValue(identifier, metadatas) Then
+            Return metadatas.Keys
+        End If
         Return Array.Empty(Of String)
     End Function
 
     Public Function ListEntityCounters(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityCounters
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        If entityCounters.TryGetValue(identifier, counters) Then
+            Return counters.Keys
+        End If
         Return Array.Empty(Of String)
     End Function
 
     Public Function ListEntityStatistics(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityStatistics
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        If entityStatistics.TryGetValue(identifier, statistics) Then
+            Return statistics.Keys
+        End If
         Return Array.Empty(Of String)
     End Function
 
     Public Function ReadEntityMetadata(identifier As TIdentifier, metadataType As String) As String Implements IEntityStore(Of TIdentifier).ReadEntityMetadata
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        Dim value As String = Nothing
+        If entityMetadatas.TryGetValue(identifier, metadatas) AndAlso
+            metadatas.TryGetValue(metadataType, value) Then
+            Return value
+        End If
         Return Nothing
     End Function
 
     Public Function ReadEntityCounter(identifier As TIdentifier, counterType As String) As Integer? Implements IEntityStore(Of TIdentifier).ReadEntityCounter
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        Dim value As Integer
+        If entityCounters.TryGetValue(identifier, counters) AndAlso
+            counters.TryGetValue(counterType, value) Then
+            Return value
+        End If
         Return Nothing
     End Function
 
-    Public Function ReadEntityStatistic(identfier As TIdentifier, statisticType As String) As Double? Implements IEntityStore(Of TIdentifier).ReadEntityStatistic
+    Public Function ReadEntityStatistic(identifier As TIdentifier, statisticType As String) As Double? Implements IEntityStore(Of TIdentifier).ReadEntityStatistic
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        Dim value As Double
+        If entityStatistics.TryGetValue(identifier, statistics) AndAlso
+            statistics.TryGetValue(statisticType, value) Then
+            Return value
+        End If
         Return Nothing
     End Function
 End Class
