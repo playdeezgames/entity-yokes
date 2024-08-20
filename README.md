@@ -1,5 +1,9 @@
 # Entity Yokes
 
+- [ ] 20240820 Entity Yokes Episode 3 - 
+- [x] 20240819 Entity Yokes Episode 2 - 
+- [x] 20240818 Entity Yokes Episode 1 - 
+
 # Requirements
 
 - [x] I can create Entities
