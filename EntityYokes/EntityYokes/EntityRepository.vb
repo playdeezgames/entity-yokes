@@ -13,6 +13,12 @@
     End Property
 
     Public Sub DestroyEntity(entity As IEntity(Of TEntityIdentifier)) Implements IEntityRepository(Of TEntityIdentifier).DestroyEntity
+        If store.ListEntityCounters(entity.Identifier).Any OrElse
+            store.ListEntityFlags(entity.Identifier).Any OrElse
+            store.ListEntityMetadatas(entity.Identifier).Any OrElse
+            store.ListEntityStatistics(entity.Identifier).Any Then
+            Throw New InvalidOperationException($"Entity with identifier `{entity.Identifier}` is not empty.")
+        End If
         store.DestroyEntity(entity.Identifier)
     End Sub
 

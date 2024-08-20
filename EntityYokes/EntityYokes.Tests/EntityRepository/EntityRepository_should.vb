@@ -56,13 +56,34 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier)
         sut.AllEntities.ShouldHaveSingleItem
         sut.DestroyEntity(entity)
         sut.AllEntities.ShouldBeEmpty
-        Should.Throw(Of KeyNotFoundException)(Function() entity.EntityType)
+        Should.Throw(Of NullReferenceException)(Function() entity.EntityType)
     End Sub
     <Fact>
     Sub not_destroy_entities_with_flags()
         Dim sut As IEntityRepository(Of TEntityIdentifier) = CreateSut()
         Dim entity = sut.CreateEntity(EntityType)
         entity.Flag("flag-type") = True
+        Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
+    End Sub
+    <Fact>
+    Sub not_destroy_entities_with_metadata()
+        Dim sut As IEntityRepository(Of TEntityIdentifier) = CreateSut()
+        Dim entity = sut.CreateEntity(EntityType)
+        entity.Metadata("metadata-type") = "value"
+        Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
+    End Sub
+    <Fact>
+    Sub not_destroy_entities_with_counter()
+        Dim sut As IEntityRepository(Of TEntityIdentifier) = CreateSut()
+        Dim entity = sut.CreateEntity(EntityType)
+        entity.Counter("counter-type") = 1
+        Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
+    End Sub
+    <Fact>
+    Sub not_destroy_entities_with_statistic()
+        Dim sut As IEntityRepository(Of TEntityIdentifier) = CreateSut()
+        Dim entity = sut.CreateEntity(EntityType)
+        entity.Statistic("statistic-type") = 1.0
         Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
     End Sub
     Private Function CreateSut() As IEntityRepository(Of TEntityIdentifier)

@@ -11,6 +11,9 @@
 
     Public ReadOnly Property EntityType As String Implements IEntity(Of TEntityIdentifier).EntityType
         Get
+            If Not store.DoesEntityExist(Identifier) Then
+                Throw New NullReferenceException($"Entity with identifier `{Identifier}` does not exist")
+            End If
             Return store.ReadEntityType(Identifier)
         End Get
     End Property

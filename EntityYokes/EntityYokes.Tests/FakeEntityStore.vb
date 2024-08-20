@@ -12,10 +12,6 @@
     End Sub
 
     Public Sub DestroyEntity(identifier As TEntityIdentifier) Implements IEntityStore(Of TEntityIdentifier).DestroyEntity
-        Dim value As HashSet(Of String) = Nothing
-        If entityFlags.TryGetValue(identifier, value) AndAlso value.Count <> 0 Then
-            Throw New InvalidOperationException($"Entity with identifier `{identifier}` has flags.")
-        End If
         entityTypes.Remove(identifier)
     End Sub
 
@@ -94,11 +90,7 @@
     End Function
 
     Public Function ReadEntityType(identifier As TEntityIdentifier) As String Implements IEntityStore(Of TEntityIdentifier).ReadEntityType
-        Dim entityType As String = Nothing
-        If Not entityTypes.TryGetValue(identifier, entityType) Then
-            Throw New KeyNotFoundException($"Did not find Entity with Identifier of `{identifier}`")
-        End If
-        Return entityType
+        Return entityTypes(identifier)
     End Function
 
     Public Function DoesEntityExist(identifier As TEntityIdentifier) As Boolean Implements IEntityStore(Of TEntityIdentifier).DoesEntityExist
