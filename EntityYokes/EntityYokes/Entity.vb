@@ -27,4 +27,10 @@
             End If
         End Set
     End Property
+
+    Public ReadOnly Property AllFlags As IEnumerable(Of String) Implements IEntity(Of TIdentifier).AllFlags
+        Get
+            Return store.ListEntityFlags(Identifier)
+        End Get
+    End Property
 End Class

@@ -58,4 +58,12 @@
         End If
         Return flags.Contains(flagType)
     End Function
+
+    Public Function ListEntityFlags(identifier As TIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TIdentifier).ListEntityFlags
+        Dim flags As HashSet(Of String) = Nothing
+        If Not entityFlags.TryGetValue(identifier, flags) Then
+            Return Array.Empty(Of String)
+        End If
+        Return flags
+    End Function
 End Class
