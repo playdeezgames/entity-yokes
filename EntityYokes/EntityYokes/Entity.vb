@@ -15,7 +15,7 @@
         End Get
     End Property
 
-    Public Property Flags(flagType As String) As Boolean Implements IEntity(Of TIdentifier).Flags
+    Public Property Flag(flagType As String) As Boolean Implements IEntity(Of TIdentifier).Flag
         Get
             Return store.CheckEntityHasFlag(Identifier, flagType)
         End Get
@@ -28,7 +28,7 @@
         End Set
     End Property
 
-    Public ReadOnly Property AllFlags As IEnumerable(Of String) Implements IEntity(Of TIdentifier).AllFlags
+    Public ReadOnly Property Flags As IEnumerable(Of String) Implements IEntity(Of TIdentifier).Flags
         Get
             Return store.ListEntityFlags(Identifier)
         End Get

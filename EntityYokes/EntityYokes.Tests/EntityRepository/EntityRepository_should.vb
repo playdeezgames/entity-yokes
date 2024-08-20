@@ -62,7 +62,7 @@ Public MustInherit Class EntityRepository_should(Of TIdentifier)
     Sub not_destroy_entities_with_flags()
         Dim sut As IEntityRepository(Of TIdentifier) = CreateSut()
         Dim entity = sut.CreateEntity(EntityType)
-        entity.Flags("flag-type") = True
+        entity.Flag("flag-type") = True
         Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
     End Sub
     Private Function CreateSut() As IEntityRepository(Of TIdentifier)

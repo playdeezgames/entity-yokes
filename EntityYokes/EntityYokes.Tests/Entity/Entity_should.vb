@@ -6,22 +6,22 @@ Public MustInherit Class Entity_should(Of TIdentifier)
     <Fact>
     Sub initially_have_no_flags()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
-        sut.Flags(FlagType).ShouldBeFalse
+        sut.Flag(FlagType).ShouldBeFalse
     End Sub
     <Fact>
     Sub set_a_flag()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
-        sut.Flags(FlagType) = True
-        sut.Flags(FlagType).ShouldBeTrue
+        sut.Flag(FlagType) = True
+        sut.Flag(FlagType).ShouldBeTrue
     End Sub
     <Fact>
     Sub retrieve_all_flags()
         Dim sut As IEntity(Of TIdentifier) = CreateSut()
         Const FirstFlagType = "first-flag"
         Const SecondFlagType = "second-flag"
-        sut.Flags(FirstFlagType) = True
-        sut.Flags(SecondFlagType) = True
-        Dim actual = sut.AllFlags
+        sut.Flag(FirstFlagType) = True
+        sut.Flag(SecondFlagType) = True
+        Dim actual = sut.Flags
         actual.Count.ShouldBe(2)
         actual.ShouldContain(FirstFlagType)
         actual.ShouldContain(SecondFlagType)
