@@ -23,12 +23,6 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         sut.Metadatas.ShouldBeEmpty
     End Sub
     <Fact>
-    Sub initially_have_no_counters()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        sut.Counters.ShouldBeEmpty
-        sut.Counter(CounterType).ShouldBeNull
-    End Sub
-    <Fact>
     Sub set_counter()
         Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
         Const value = 1
@@ -42,12 +36,6 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         sut.Counter(CounterType) = Nothing
         sut.Counter(CounterType).ShouldBeNull
         sut.Counters.ShouldBeEmpty
-    End Sub
-    <Fact>
-    Sub initially_have_no_statistics()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        sut.Statistics.ShouldBeEmpty
-        sut.Statistic(StatisticType).ShouldBeNull
     End Sub
     <Fact>
     Sub set_statistic()

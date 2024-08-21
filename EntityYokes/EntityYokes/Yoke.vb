@@ -61,7 +61,7 @@
 
     Public Property Counter(counterType As String) As Integer? Implements IThingie.Counter
         Get
-            Throw New NotImplementedException()
+            Return Nothing
         End Get
         Set(value As Integer?)
             Throw New NotImplementedException()
@@ -70,13 +70,13 @@
 
     Public ReadOnly Property Counters As IEnumerable(Of String) Implements IThingie.Counters
         Get
-            Throw New NotImplementedException()
+            Return Array.Empty(Of String)
         End Get
     End Property
 
     Public Property Statistic(statisticType As String) As Double? Implements IThingie.Statistic
         Get
-            Throw New NotImplementedException()
+            Return Nothing
         End Get
         Set(value As Double?)
             Throw New NotImplementedException()
@@ -85,7 +85,7 @@
 
     Public ReadOnly Property Statistics As IEnumerable(Of String) Implements IThingie.Statistics
         Get
-            Throw New NotImplementedException()
+            Return Array.Empty(Of String)
         End Get
     End Property
 End Class
