@@ -1,4 +1,4 @@
-Public Interface IEntity(Of TEntityIdentifier)
+Public Interface IEntity(Of TEntityIdentifier, TYokeIdentifier)
     ReadOnly Property Identifier As TEntityIdentifier
     ReadOnly Property EntityType As String
     Property Flag(flagType As String) As Boolean
@@ -9,5 +9,7 @@ Public Interface IEntity(Of TEntityIdentifier)
     ReadOnly Property Counters As IEnumerable(Of String)
     Property Statistic(statisticType As String) As Double?
     ReadOnly Property Statistics As IEnumerable(Of String)
-    Function CreateYoke(yokeType As String, yokedEntity As IEntity(Of TEntityIdentifier)) As IYoke
+    Function CreateYoke(yokeType As String, yokedEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier)) As IYoke(Of TEntityIdentifier, TYokeIdentifier)
+    ReadOnly Property YokesFrom(yokeType As String) As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier))
+    ReadOnly Property YokesTo(yokeType As String) As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier))
 End Interface
