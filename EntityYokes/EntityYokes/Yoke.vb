@@ -43,4 +43,49 @@
             Throw New NotImplementedException()
         End Set
     End Property
+
+    Public Property Metadata(metadataType As String) As String Implements IThingie.Metadata
+        Get
+            Return Nothing
+        End Get
+        Set(value As String)
+            Throw New NotImplementedException()
+        End Set
+    End Property
+
+    Public ReadOnly Property Metadatas As IEnumerable(Of String) Implements IThingie.Metadatas
+        Get
+            Return Array.Empty(Of String)
+        End Get
+    End Property
+
+    Public Property Counter(counterType As String) As Integer? Implements IThingie.Counter
+        Get
+            Throw New NotImplementedException()
+        End Get
+        Set(value As Integer?)
+            Throw New NotImplementedException()
+        End Set
+    End Property
+
+    Public ReadOnly Property Counters As IEnumerable(Of String) Implements IThingie.Counters
+        Get
+            Throw New NotImplementedException()
+        End Get
+    End Property
+
+    Public Property Statistic(statisticType As String) As Double? Implements IThingie.Statistic
+        Get
+            Throw New NotImplementedException()
+        End Get
+        Set(value As Double?)
+            Throw New NotImplementedException()
+        End Set
+    End Property
+
+    Public ReadOnly Property Statistics As IEnumerable(Of String) Implements IThingie.Statistics
+        Get
+            Throw New NotImplementedException()
+        End Get
+    End Property
 End Class

@@ -2,22 +2,11 @@
 Imports Xunit
 
 Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
+    Inherits Thingie_should(Of IEntity(Of TEntityIdentifier, TYokeIdentifier))
     Const FlagType = "flag-type"
     Const MetadataType = "metadata-type"
     Const CounterType = "counter-type"
     Const StatisticType = "statistic-type"
-    <Fact>
-    Sub initially_have_no_flags()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        sut.Flags.ShouldBeEmpty
-        sut.Flag(FlagType).ShouldBeFalse
-    End Sub
-    <Fact>
-    Sub initially_have_no_metadatas()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        sut.Metadatas.ShouldBeEmpty
-        sut.Metadata(MetadataType).ShouldBeNull
-    End Sub
     <Fact>
     Sub set_metadata()
         Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
@@ -131,7 +120,7 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         sut.YokesTo.Single.FromEntity.Identifier.ShouldBe(sut.Identifier)
     End Sub
     Const EntityType = "entity-type"
-    Private Function CreateSut() As IEntity(Of TEntityIdentifier, TYokeIdentifier)
+    Protected Overrides Function CreateSut() As IEntity(Of TEntityIdentifier, TYokeIdentifier)
         Return CreateRepository().CreateEntity(EntityType)
     End Function
     Private Function CreateRepository() As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier)
