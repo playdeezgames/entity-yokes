@@ -35,10 +35,12 @@
 - [x] I can list statistic keys for an entity
 - [x] I can clear a statistic for an entity by key 
 - [x] I can create yokes of a yoke type from an entity to another entity
-    - [ ] The from and to entities may be the same
-    - [ ] Yokes are unique over yoke type, from entity, and to entity
-- [ ] I can list yoked-to entities of a type for an entity
-- [ ] I can list yoked-from entities of a type for an entity
+    - [x] The from and to entities may be the same
+- [x] I can list yoked-to entities of a type for an entity
+- [x] I can list yoked-from entities of a type for an entity
+- [ ] Yokes make an entity non-empty and thus not destroyable
+- [ ] Yokes can be destroyed
+- [ ] Yokes have to be empty to be destroyed
 - [ ] Yokes have flags
     - [ ] Set flag
     - [ ] Check for flag
