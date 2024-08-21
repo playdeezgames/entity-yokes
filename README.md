@@ -38,7 +38,7 @@
     - [x] The from and to entities may be the same
 - [x] I can list yoked-to entities of a type for an entity
 - [x] I can list yoked-from entities of a type for an entity
-- [ ] Yokes make an entity non-empty and thus not destroyable
+- [x] Yokes make an entity non-empty and thus not destroyable
 - [ ] Yokes can be destroyed
 - [ ] Yokes have to be empty to be destroyed
 - [ ] Yokes have flags

@@ -28,4 +28,19 @@
             Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYokeToIdentifier(identifier))
         End Get
     End Property
+
+    Public ReadOnly Property Flags As IEnumerable(Of String) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Flags
+        Get
+            Return Array.Empty(Of String)
+        End Get
+    End Property
+
+    Public Property Flag(flagType As String) As Boolean Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Flag
+        Get
+            Return False
+        End Get
+        Set(value As Boolean)
+            Throw New NotImplementedException()
+        End Set
+    End Property
 End Class
