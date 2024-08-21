@@ -13,19 +13,19 @@
 
     Public ReadOnly Property YokeType As String Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).YokeType
         Get
-            Return store.ReadYoke(identifier).Value.YokeType
+            Return store.ReadYokeType(identifier)
         End Get
     End Property
 
     Public ReadOnly Property FromEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).FromEntity
         Get
-            Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYoke(identifier).Value.FromIdentifier)
+            Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYokeFromIdentifier(identifier))
         End Get
     End Property
 
     Public ReadOnly Property ToEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).ToEntity
         Get
-            Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYoke(identifier).Value.ToIdentifier)
+            Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYokeToIdentifier(identifier))
         End Get
     End Property
 End Class

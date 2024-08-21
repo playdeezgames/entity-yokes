@@ -112,10 +112,10 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         yoke.FromEntity.Identifier.ShouldBe(firstEntity.Identifier)
         yoke.ToEntity.Identifier.ShouldBe(secondEntity.Identifier)
         yoke.YokeType.ShouldBe(YokeType)
-        firstEntity.YokesFrom(YokeType).ShouldHaveSingleItem
-        firstEntity.YokesFrom(YokeType).Single.ToEntity.Identifier.ShouldBe(secondEntity.Identifier)
-        secondEntity.YokesTo(YokeType).ShouldHaveSingleItem
-        secondEntity.YokesTo(YokeType).Single.FromEntity.Identifier.ShouldBe(firstEntity.Identifier)
+        firstEntity.YokesFrom.ShouldHaveSingleItem
+        firstEntity.YokesFrom.Single.ToEntity.Identifier.ShouldBe(secondEntity.Identifier)
+        secondEntity.YokesTo.ShouldHaveSingleItem
+        secondEntity.YokesTo.Single.FromEntity.Identifier.ShouldBe(firstEntity.Identifier)
     End Sub
     <Fact>
     Sub yoke_to_self()
@@ -125,10 +125,10 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         yoke.FromEntity.Identifier.ShouldBe(sut.Identifier)
         yoke.ToEntity.Identifier.ShouldBe(sut.Identifier)
         yoke.YokeType.ShouldBe(YokeType)
-        sut.YokesFrom(YokeType).ShouldHaveSingleItem
-        sut.YokesFrom(YokeType).Single.ToEntity.Identifier.ShouldBe(sut.Identifier)
-        sut.YokesTo(YokeType).ShouldHaveSingleItem
-        sut.YokesTo(YokeType).Single.FromEntity.Identifier.ShouldBe(sut.Identifier)
+        sut.YokesFrom.ShouldHaveSingleItem
+        sut.YokesFrom.Single.ToEntity.Identifier.ShouldBe(sut.Identifier)
+        sut.YokesTo.ShouldHaveSingleItem
+        sut.YokesTo.Single.FromEntity.Identifier.ShouldBe(sut.Identifier)
     End Sub
     Const EntityType = "entity-type"
     Private Function CreateSut() As IEntity(Of TEntityIdentifier, TYokeIdentifier)

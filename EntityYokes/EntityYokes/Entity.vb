@@ -98,15 +98,15 @@
         End Set
     End Property
 
-    Public ReadOnly Property YokesFrom(yokeType As String) As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).YokesFrom
+    Public ReadOnly Property YokesFrom As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).YokesFrom
         Get
-            Return store.ReadEntityYokesFrom(Identifier, yokeType).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
+            Return store.ListEntityYokesFrom(Identifier).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
         End Get
     End Property
 
-    Public ReadOnly Property YokesTo(yokeType As String) As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).YokesTo
+    Public ReadOnly Property YokesTo As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).YokesTo
         Get
-            Return store.ReadEntityYokesTo(Identifier, yokeType).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
+            Return store.ListEntityYokesTo(Identifier).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
         End Get
     End Property
 End Class

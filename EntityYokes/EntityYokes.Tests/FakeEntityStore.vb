@@ -176,7 +176,7 @@
         Return Nothing
     End Function
 
-    Public Function ReadEntityYokesFrom(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadEntityYokesFrom
+    Public Function ListEntityYokesFrom(identifier As TEntityIdentifier) As IEnumerable(Of TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListEntityYokesFrom
         Dim yokes As HashSet(Of TYokeIdentifier) = Nothing
         If fromYokes.TryGetValue(identifier, yokes) Then
             Return yokes
@@ -184,7 +184,7 @@
         Return Array.Empty(Of TYokeIdentifier)
     End Function
 
-    Public Function ReadEntityYokesTo(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadEntityYokesTo
+    Public Function ListEntityYokesTo(identifier As TEntityIdentifier) As IEnumerable(Of TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListEntityYokesTo
         Dim yokes As HashSet(Of TYokeIdentifier) = Nothing
         If toYokes.TryGetValue(identifier, yokes) Then
             Return yokes
@@ -218,7 +218,15 @@
         yokes.Add(identifier)
     End Sub
 
-    Public Function ReadYoke(identifier As TYokeIdentifier) As (YokeType As String, FromIdentifier As TEntityIdentifier, ToIdentifier As TEntityIdentifier)? Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYoke
-        Return yokeData(identifier)
+    Public Function ReadYokeType(identifier As TYokeIdentifier) As String Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeType
+        Return yokeData(identifier).YokeType
+    End Function
+
+    Public Function ReadYokeFromIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeFromIdentifier
+        Return yokeData(identifier).FromIdentifier
+    End Function
+
+    Public Function ReadYokeToIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeToIdentifier
+        Return yokeData(identifier).ToIdentifier
     End Function
 End Class

@@ -86,6 +86,13 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
         entity.Statistic("statistic-type") = 1.0
         Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
     End Sub
+    <Fact>
+    Sub not_destroy_entities_with_yokes()
+        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
+        Dim entity = sut.CreateEntity(EntityType)
+        Dim yoke = entity.CreateYoke("yoke-type", entity)
+        Should.Throw(Of InvalidOperationException)(Sub() sut.DestroyEntity(entity))
+    End Sub
     Private Function CreateSut() As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier)
         Return New EntityRepository(Of TEntityIdentifier, TYokeIdentifier)(CreateStore())
     End Function

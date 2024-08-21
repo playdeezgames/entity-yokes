@@ -22,7 +22,9 @@
     Function ReadEntityMetadata(identifier As TEntityIdentifier, metadataType As String) As String
     Function ReadEntityCounter(identifier As TEntityIdentifier, counterType As String) As Integer?
     Function ReadEntityStatistic(identifier As TEntityIdentifier, statisticType As String) As Double?
-    Function ReadEntityYokesFrom(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier)
-    Function ReadEntityYokesTo(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier)
-    Function ReadYoke(identifier As TYokeIdentifier) As (YokeType As String, FromIdentifier As TEntityIdentifier, ToIdentifier As TEntityIdentifier)?
+    Function ListEntityYokesFrom(identifier As TEntityIdentifier) As IEnumerable(Of TYokeIdentifier)
+    Function ListEntityYokesTo(identifier As TEntityIdentifier) As IEnumerable(Of TYokeIdentifier)
+    Function ReadYokeType(identifier As TYokeIdentifier) As String
+    Function ReadYokeFromIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier
+    Function ReadYokeToIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier
 End Interface
