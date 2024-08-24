@@ -6,7 +6,9 @@
     Private ReadOnly entityMetadatas As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, String))
     Private ReadOnly yokeMetadatas As New Dictionary(Of TYokeIdentifier, Dictionary(Of String, String))
     Private ReadOnly entityCounters As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, Integer))
+    Private ReadOnly yokeCounters As New Dictionary(Of TYokeIdentifier, Dictionary(Of String, Integer))
     Private ReadOnly entityStatistics As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, Double))
+    Private ReadOnly yokeStatistics As New Dictionary(Of TYokeIdentifier, Dictionary(Of String, Double))
     Private ReadOnly nextEntityIdentifier As Func(Of TEntityIdentifier)
     Private ReadOnly nextYokeIdentifier As Func(Of TYokeIdentifier)
     Private ReadOnly yokeData As New Dictionary(Of TYokeIdentifier, (YokeType As String, FromIdentifier As TEntityIdentifier, ToIdentifier As TEntityIdentifier))
@@ -294,6 +296,74 @@
         Dim metadatas As Dictionary(Of String, String) = Nothing
         If yokeMetadatas.TryGetValue(identifier, metadatas) Then
             Return metadatas.Keys
+        End If
+        Return Array.Empty(Of String)
+    End Function
+
+    Public Sub WriteYokeCounter(identifier As TYokeIdentifier, counterType As String, value As Integer) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).WriteYokeCounter
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        If Not yokeCounters.TryGetValue(identifier, counters) Then
+            counters = New Dictionary(Of String, Integer)
+            yokeCounters(identifier) = counters
+        End If
+        counters(counterType) = value
+    End Sub
+
+    Public Sub ClearYokeCounter(identifier As TYokeIdentifier, counterType As String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ClearYokeCounter
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        If yokeCounters.TryGetValue(identifier, counters) Then
+            counters.Remove(counterType)
+        End If
+    End Sub
+
+    Public Sub WriteYokeStatistic(identifier As TYokeIdentifier, statisticType As String, value As Double) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).WriteYokeStatistic
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        If Not yokeStatistics.TryGetValue(identifier, statistics) Then
+            statistics = New Dictionary(Of String, Double)
+            yokeStatistics(identifier) = statistics
+        End If
+        statistics(statisticType) = value
+    End Sub
+
+    Public Sub ClearYokeStatistic(identifier As TYokeIdentifier, statisticType As String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ClearYokeStatistic
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        If yokeStatistics.TryGetValue(identifier, statistics) Then
+            statistics.Remove(statisticType)
+        End If
+    End Sub
+
+    Public Function ReadYokeCounter(identifier As TYokeIdentifier, counterType As String) As Integer? Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeCounter
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        Dim value As Integer
+        If yokeCounters.TryGetValue(identifier, counters) AndAlso
+            counters.TryGetValue(counterType, value) Then
+            Return value
+        End If
+        Return Nothing
+    End Function
+
+    Public Function ListYokeCounters(identifier As TYokeIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListYokeCounters
+        Dim counters As Dictionary(Of String, Integer) = Nothing
+        If yokeCounters.TryGetValue(identifier, counters) Then
+            Return counters.Keys
+        End If
+        Return Array.Empty(Of String)
+    End Function
+
+    Public Function ReadYokeStatistic(identifier As TYokeIdentifier, statisticType As String) As Double? Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeStatistic
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        Dim value As Double
+        If yokeStatistics.TryGetValue(identifier, statistics) AndAlso
+            statistics.TryGetValue(statisticType, value) Then
+            Return value
+        End If
+        Return Nothing
+    End Function
+
+    Public Function ListYokeStatistics(identifier As TYokeIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListYokeStatistics
+        Dim statistics As Dictionary(Of String, Double) = Nothing
+        If yokeStatistics.TryGetValue(identifier, statistics) Then
+            Return statistics.Keys
         End If
         Return Array.Empty(Of String)
     End Function

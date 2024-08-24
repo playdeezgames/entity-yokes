@@ -8,36 +8,6 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
     Const CounterType = "counter-type"
     Const StatisticType = "statistic-type"
     <Fact>
-    Sub set_counter()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        Const value = 1
-        sut.Counter(CounterType) = value
-        sut.Counter(CounterType).ShouldBe(value)
-        sut.Counters.ShouldHaveSingleItem
-        Const otherValue = 2
-        sut.Counter(CounterType) = otherValue
-        sut.Counter(CounterType).ShouldBe(otherValue)
-        sut.Counters.ShouldHaveSingleItem
-        sut.Counter(CounterType) = Nothing
-        sut.Counter(CounterType).ShouldBeNull
-        sut.Counters.ShouldBeEmpty
-    End Sub
-    <Fact>
-    Sub set_statistic()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        Const value = 1.0
-        sut.Statistic(StatisticType) = value
-        sut.Statistic(StatisticType).ShouldBe(value)
-        sut.Statistics.ShouldHaveSingleItem
-        Const otherValue = 2.0
-        sut.Statistic(StatisticType) = otherValue
-        sut.Statistic(StatisticType).ShouldBe(otherValue)
-        sut.Statistics.ShouldHaveSingleItem
-        sut.Statistic(StatisticType) = Nothing
-        sut.Statistic(StatisticType).ShouldBeNull
-        sut.Statistics.ShouldBeEmpty
-    End Sub
-    <Fact>
     Sub yoke_to_another_entity()
         Dim repository = CreateRepository()
         Dim firstEntity = repository.CreateEntity(EntityType)

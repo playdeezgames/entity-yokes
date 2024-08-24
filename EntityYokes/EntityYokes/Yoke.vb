@@ -69,31 +69,39 @@
 
     Public Property Counter(counterType As String) As Integer? Implements IThingie.Counter
         Get
-            Return Nothing
+            Return store.ReadYokeCounter(identifier, counterType)
         End Get
         Set(value As Integer?)
-            Throw New NotImplementedException()
+            If value IsNot Nothing Then
+                store.WriteYokeCounter(identifier, counterType, value.Value)
+            Else
+                store.ClearYokeCounter(identifier, counterType)
+            End If
         End Set
     End Property
 
     Public ReadOnly Property Counters As IEnumerable(Of String) Implements IThingie.Counters
         Get
-            Return Array.Empty(Of String)
+            Return store.ListYokeCounters(identifier)
         End Get
     End Property
 
     Public Property Statistic(statisticType As String) As Double? Implements IThingie.Statistic
         Get
-            Return Nothing
+            Return store.ReadYokeStatistic(identifier, statisticType)
         End Get
         Set(value As Double?)
-            Throw New NotImplementedException()
+            If value IsNot Nothing Then
+                store.WriteYokeStatistic(identifier, statisticType, value.Value)
+            Else
+                store.ClearYokeStatistic(identifier, statisticType)
+            End If
         End Set
     End Property
 
     Public ReadOnly Property Statistics As IEnumerable(Of String) Implements IThingie.Statistics
         Get
-            Return Array.Empty(Of String)
+            Return store.ListYokeStatistics(identifier)
         End Get
     End Property
 End Class

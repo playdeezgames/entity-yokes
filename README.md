@@ -42,17 +42,17 @@
 - [x] Yokes make an entity non-empty and thus not destroyable
 - [ ] Yokes can be destroyed
 - [ ] Yokes have to be empty to be destroyed
-- [ ] Yokes have flags
-    - [ ] Set flag
-    - [ ] Check for flag
-    - [ ] Read all flags
-    - [ ] Clear flag
-- [ ] Yokes have metadatas
-    - [ ] Set metadata
-    - [ ] Read metadata
-    - [ ] Update metadata
-    - [ ] List metadata keys
-    - [ ] Clear metadata
+- [x] Yokes have flags
+    - [x] Set flag
+    - [x] Check for flag
+    - [x] Read all flags
+    - [x] Clear flag
+- [x] Yokes have metadatas
+    - [x] Set metadata
+    - [x] Read metadata
+    - [x] Update metadata
+    - [x] List metadata keys
+    - [x] Clear metadata
 - [ ] Yokes have counters
     - [ ] Set counter
     - [ ] Read counter

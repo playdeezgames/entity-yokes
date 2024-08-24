@@ -68,10 +68,40 @@ Public MustInherit Class Thingie_should(Of TThingie As IThingie)
         sut.Counter(CounterType).ShouldBeNull
     End Sub
     <Fact>
+    Sub set_counter()
+        Dim sut As TThingie = CreateSut()
+        Const value = 1
+        sut.Counter(CounterType) = value
+        sut.Counter(CounterType).ShouldBe(value)
+        sut.Counters.ShouldHaveSingleItem
+        Const otherValue = 2
+        sut.Counter(CounterType) = otherValue
+        sut.Counter(CounterType).ShouldBe(otherValue)
+        sut.Counters.ShouldHaveSingleItem
+        sut.Counter(CounterType) = Nothing
+        sut.Counter(CounterType).ShouldBeNull
+        sut.Counters.ShouldBeEmpty
+    End Sub
+    <Fact>
     Sub initially_have_no_statistics()
         Dim sut As TThingie = CreateSut()
         sut.Statistics.ShouldBeEmpty
         sut.Statistic(StatisticType).ShouldBeNull
+    End Sub
+    <Fact>
+    Sub set_statistic()
+        Dim sut As TThingie = CreateSut()
+        Const value = 1.0
+        sut.Statistic(StatisticType) = value
+        sut.Statistic(StatisticType).ShouldBe(value)
+        sut.Statistics.ShouldHaveSingleItem
+        Const otherValue = 2.0
+        sut.Statistic(StatisticType) = otherValue
+        sut.Statistic(StatisticType).ShouldBe(otherValue)
+        sut.Statistics.ShouldHaveSingleItem
+        sut.Statistic(StatisticType) = Nothing
+        sut.Statistic(StatisticType).ShouldBeNull
+        sut.Statistics.ShouldBeEmpty
     End Sub
     Protected MustOverride Function CreateSut() As TThingie
 End Class
