@@ -367,4 +367,8 @@
         End If
         Return Array.Empty(Of String)
     End Function
+
+    Public Sub DestroyYoke(identifier As TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).DestroyYoke
+        Throw New NotImplementedException()
+    End Sub
 End Class

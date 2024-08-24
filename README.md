@@ -40,8 +40,8 @@
 - [x] I can list yoked-to entities of a type for an entity
 - [x] I can list yoked-from entities of a type for an entity
 - [x] Yokes make an entity non-empty and thus not destroyable
-- [ ] Yokes can be destroyed
-- [ ] Yokes have to be empty to be destroyed
+- [x] Yokes can be destroyed
+- [x] Yokes have to be empty to be destroyed
 - [x] Yokes have flags
     - [x] Set flag
     - [x] Check for flag

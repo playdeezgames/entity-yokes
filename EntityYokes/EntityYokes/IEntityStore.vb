@@ -16,6 +16,7 @@
     Sub ClearYokeCounter(identifier As TYokeIdentifier, counterType As String)
     Sub WriteYokeStatistic(identifier As TYokeIdentifier, statisticType As String, value As Double)
     Sub ClearYokeStatistic(identifier As TYokeIdentifier, statisticType As String)
+    Sub DestroyYoke(identifier As TYokeIdentifier)
     Function CreateEntity(entityType As String) As TEntityIdentifier
     Function CreateYoke(yokeType As String, fromIdentifier As TEntityIdentifier, toIdentifier As TEntityIdentifier) As TYokeIdentifier
     Function ListEntities() As IEnumerable(Of TEntityIdentifier)

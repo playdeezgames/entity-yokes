@@ -104,4 +104,14 @@
             Return store.ListYokeStatistics(identifier)
         End Get
     End Property
+
+    Public Sub Destroy() Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Destroy
+        If store.ListYokeCounters(identifier).Any OrElse
+            store.ListYokeFlags(identifier).Any OrElse
+            store.ListYokeMetadatas(identifier).Any OrElse
+            store.ListYokeStatistics(identifier).Any Then
+            Throw New InvalidOperationException($"Yoke with identifier `{identifier}` is not empty.")
+        End If
+        store.DestroyYoke(identifier)
+    End Sub
 End Class
