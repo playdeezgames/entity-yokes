@@ -65,3 +65,12 @@
     - [x] Update statistic
     - [x] List statistic keys
     - [x] Clear statistic
+- [ ] Create SQLite backing store
+- [ ] Minesweeper Example
+    - [ ] EntityType: Cell
+        - [ ] Counters: Column(0..Columns-1), Row(0..Rows-1)
+        - [ ] Flags: Revealed, Bomb
+        - [ ] Yokes: 
+            - [ ] YokeType: Neighbor
+                - [ ] Counters: Direction (0..3)
+
