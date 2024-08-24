@@ -1,5 +1,5 @@
 ﻿Friend Class Yoke(Of TEntityIdentifier, TYokeIdentifier)
-    Implements IYoke(Of TEntityIdentifier, TYokeIdentifier)
+    Implements IYoke
 
     Private ReadOnly store As IEntityStore(Of TEntityIdentifier, TYokeIdentifier)
     Private ReadOnly identifier As TYokeIdentifier
@@ -11,31 +11,31 @@
         Me.identifier = identifier
     End Sub
 
-    Public ReadOnly Property YokeType As String Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).YokeType
+    Public ReadOnly Property YokeType As String Implements IYoke.YokeType
         Get
             Return store.ReadYokeType(identifier)
         End Get
     End Property
 
-    Public ReadOnly Property FromEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).FromEntity
+    Public ReadOnly Property FromEntity As IEntity Implements IYoke.FromEntity
         Get
             Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYokeFromIdentifier(identifier))
         End Get
     End Property
 
-    Public ReadOnly Property ToEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).ToEntity
+    Public ReadOnly Property ToEntity As IEntity Implements IYoke.ToEntity
         Get
             Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, store.ReadYokeToIdentifier(identifier))
         End Get
     End Property
 
-    Public ReadOnly Property Flags As IEnumerable(Of String) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Flags
+    Public ReadOnly Property Flags As IEnumerable(Of String) Implements IYoke.Flags
         Get
             Return store.ListYokeFlags(identifier)
         End Get
     End Property
 
-    Public Property Flag(flagType As String) As Boolean Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Flag
+    Public Property Flag(flagType As String) As Boolean Implements IYoke.Flag
         Get
             Return store.CheckYokeHasFlag(identifier, flagType)
         End Get
@@ -105,7 +105,7 @@
         End Get
     End Property
 
-    Public Sub Destroy() Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Destroy
+    Public Sub Destroy() Implements IYoke.Destroy
         If store.ListYokeCounters(identifier).Any OrElse
             store.ListYokeFlags(identifier).Any OrElse
             store.ListYokeMetadatas(identifier).Any OrElse

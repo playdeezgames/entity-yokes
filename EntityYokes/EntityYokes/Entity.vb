@@ -1,16 +1,16 @@
 ﻿Friend Class Entity(Of TEntityIdentifier, TYokeIdentifier)
-    Implements IEntity(Of TEntityIdentifier, TYokeIdentifier)
+    Implements IEntity
 
     Friend Sub New(store As IEntityStore(Of TEntityIdentifier, TYokeIdentifier), identifier As TEntityIdentifier)
         Me.store = store
         Me.Identifier = identifier
     End Sub
 
-    Public Function CreateYoke(yokeType As String, yokedEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier)) As IYoke(Of TEntityIdentifier, TYokeIdentifier) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).CreateYoke
+    Public Function CreateYoke(yokeType As String, yokedEntity As IEntity) As IYoke Implements IEntity.CreateYoke
         Return New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, store.CreateYoke(yokeType, Me.Identifier, CType(yokedEntity, Entity(Of TEntityIdentifier, TYokeIdentifier)).Identifier))
     End Function
 
-    Public Sub Destroy() Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Destroy
+    Public Sub Destroy() Implements IEntity.Destroy
         If store.ListEntityCounters(Identifier).Any OrElse
             store.ListEntityFlags(Identifier).Any OrElse
             store.ListEntityMetadatas(Identifier).Any OrElse
@@ -25,7 +25,7 @@
     Private ReadOnly store As IEntityStore(Of TEntityIdentifier, TYokeIdentifier)
     Private ReadOnly Identifier As TEntityIdentifier
 
-    Public ReadOnly Property EntityType As String Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).EntityType
+    Public ReadOnly Property EntityType As String Implements IEntity.EntityType
         Get
             If Not store.DoesEntityExist(Identifier) Then
                 Throw New NullReferenceException($"Entity with identifier `{Identifier}` does not exist")
@@ -34,7 +34,7 @@
         End Get
     End Property
 
-    Public Property Flag(flagType As String) As Boolean Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Flag
+    Public Property Flag(flagType As String) As Boolean Implements IEntity.Flag
         Get
             Return store.CheckEntityHasFlag(Identifier, flagType)
         End Get
@@ -47,31 +47,31 @@
         End Set
     End Property
 
-    Public ReadOnly Property Flags As IEnumerable(Of String) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Flags
+    Public ReadOnly Property Flags As IEnumerable(Of String) Implements IEntity.Flags
         Get
             Return store.ListEntityFlags(Identifier)
         End Get
     End Property
 
-    Public ReadOnly Property Metadatas As IEnumerable(Of String) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Metadatas
+    Public ReadOnly Property Metadatas As IEnumerable(Of String) Implements IEntity.Metadatas
         Get
             Return store.ListEntityMetadatas(Identifier)
         End Get
     End Property
 
-    Public ReadOnly Property Counters As IEnumerable(Of String) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Counters
+    Public ReadOnly Property Counters As IEnumerable(Of String) Implements IEntity.Counters
         Get
             Return store.ListEntityCounters(Identifier)
         End Get
     End Property
 
-    Public ReadOnly Property Statistics As IEnumerable(Of String) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Statistics
+    Public ReadOnly Property Statistics As IEnumerable(Of String) Implements IEntity.Statistics
         Get
             Return store.ListEntityStatistics(Identifier)
         End Get
     End Property
 
-    Public Property Metadata(metadataType As String) As String Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Metadata
+    Public Property Metadata(metadataType As String) As String Implements IEntity.Metadata
         Get
             Return store.ReadEntityMetadata(Identifier, metadataType)
         End Get
@@ -84,7 +84,7 @@
         End Set
     End Property
 
-    Public Property Counter(counterType As String) As Integer? Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Counter
+    Public Property Counter(counterType As String) As Integer? Implements IEntity.Counter
         Get
             Return store.ReadEntityCounter(Identifier, counterType)
         End Get
@@ -97,7 +97,7 @@
         End Set
     End Property
 
-    Public Property Statistic(statisticType As String) As Double? Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Statistic
+    Public Property Statistic(statisticType As String) As Double? Implements IEntity.Statistic
         Get
             Return store.ReadEntityStatistic(Identifier, statisticType)
         End Get
@@ -110,20 +110,20 @@
         End Set
     End Property
 
-    Public ReadOnly Property YokesFrom As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).YokesFrom
+    Public ReadOnly Property YokesFrom As IEnumerable(Of IYoke) Implements IEntity.YokesFrom
         Get
             Return store.ListEntityYokesFrom(Identifier).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
         End Get
     End Property
 
-    Public ReadOnly Property YokesTo As IEnumerable(Of IYoke(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).YokesTo
+    Public ReadOnly Property YokesTo As IEnumerable(Of IYoke) Implements IEntity.YokesTo
         Get
             Return store.ListEntityYokesTo(Identifier).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
         End Get
     End Property
 
     Public Overrides Function Equals(obj As Object) As Boolean
-        Dim other As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CType(obj, IEntity(Of TEntityIdentifier, TYokeIdentifier))
+        Dim other As IEntity = CType(obj, IEntity)
         If other Is Nothing Then
             Return False
         End If

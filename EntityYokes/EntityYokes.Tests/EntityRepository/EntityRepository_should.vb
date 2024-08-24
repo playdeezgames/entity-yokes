@@ -7,7 +7,7 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
     <InlineData("entity-type")>
     <InlineData("entity-type2")>
     Sub create_entity_with_identifier_and_entity_type(entityType As String)
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
+        Dim sut As IEntityRepository = CreateSut()
         sut.AllEntities.Count.ShouldBe(0)
         Dim actual = sut.CreateEntity(entityType)
         actual.ShouldNotBeNull()
@@ -16,12 +16,12 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
     End Sub
     <Fact>
     Sub blow_up_when_trying_to_create_entity_with_null_entity_type()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
+        Dim sut As IEntityRepository = CreateSut()
         Should.Throw(Of ArgumentNullException)(Function() sut.CreateEntity(Nothing))
     End Sub
     <Fact>
     Sub create_entities_with_different_identifiers()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
+        Dim sut As IEntityRepository = CreateSut()
         Dim firstEntity = sut.CreateEntity(EntityType)
         Dim secondEntity = sut.CreateEntity(EntityType)
         firstEntity.ShouldNotBe(secondEntity)
@@ -29,7 +29,7 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
     End Sub
     <Fact>
     Sub retrieve_entities_by_entity_type()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
+        Dim sut As IEntityRepository = CreateSut()
         sut.RetrieveEntitiesOfType(EntityType).Count.ShouldBe(0)
         sut.CreateEntity(EntityType)
         sut.CreateEntity(EntityType)
@@ -37,7 +37,7 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
         actual.Count.ShouldBe(2)
         actual.All(Function(x) x.EntityType = EntityType).ShouldBeTrue
     End Sub
-    Private Function CreateSut() As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier)
+    Private Function CreateSut() As IEntityRepository
         Return New EntityRepository(Of TEntityIdentifier, TYokeIdentifier)(CreateStore())
     End Function
     Protected MustOverride Function NextEntityIdentifier() As TEntityIdentifier
