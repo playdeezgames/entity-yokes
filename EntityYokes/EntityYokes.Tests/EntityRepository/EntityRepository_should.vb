@@ -11,9 +11,6 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
         sut.AllEntities.Count.ShouldBe(0)
         Dim actual = sut.CreateEntity(entityType)
         actual.ShouldNotBeNull()
-        Should.NotThrow(Sub()
-                            Dim identifier = actual.Identifier
-                        End Sub)
         actual.EntityType.ShouldBe(entityType)
         sut.AllEntities.Count.ShouldBe(1)
     End Sub
@@ -27,16 +24,8 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
         Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
         Dim firstEntity = sut.CreateEntity(EntityType)
         Dim secondEntity = sut.CreateEntity(EntityType)
-        firstEntity.Identifier.ShouldNotBe(secondEntity.Identifier)
+        firstEntity.ShouldNotBe(secondEntity)
         sut.AllEntities.Count.ShouldBe(2)
-    End Sub
-    <Fact>
-    Sub retrieve_entity_by_identifier()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        Dim entityIdentifier = sut.CreateEntity(EntityType).Identifier
-        Dim actual = sut.RetrieveEntity(entityIdentifier)
-        actual.ShouldNotBeNull
-        actual.Identifier.ShouldBe(entityIdentifier)
     End Sub
     <Fact>
     Sub retrieve_entities_by_entity_type()

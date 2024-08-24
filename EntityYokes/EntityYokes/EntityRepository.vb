@@ -20,13 +20,6 @@
         Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, identifier)
     End Function
 
-    Public Function RetrieveEntity(identifier As TEntityIdentifier) As IEntity(Of TEntityIdentifier, TYokeIdentifier) Implements IEntityRepository(Of TEntityIdentifier, TYokeIdentifier).RetrieveEntity
-        If Not store.DoesEntityExist(identifier) Then
-            Return Nothing
-        End If
-        Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, identifier)
-    End Function
-
     Public Function RetrieveEntitiesOfType(entityType As String) As IEnumerable(Of IEntity(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntityRepository(Of TEntityIdentifier, TYokeIdentifier).RetrieveEntitiesOfType
         Return store.ListEntitiesOfType(entityType).Select(Function(x) New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, x))
     End Function

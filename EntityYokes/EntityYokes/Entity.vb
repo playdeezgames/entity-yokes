@@ -7,7 +7,7 @@
     End Sub
 
     Public Function CreateYoke(yokeType As String, yokedEntity As IEntity(Of TEntityIdentifier, TYokeIdentifier)) As IYoke(Of TEntityIdentifier, TYokeIdentifier) Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).CreateYoke
-        Return New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, store.CreateYoke(yokeType, Me.Identifier, yokedEntity.Identifier))
+        Return New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, store.CreateYoke(yokeType, Me.Identifier, CType(yokedEntity, Entity(Of TEntityIdentifier, TYokeIdentifier)).Identifier))
     End Function
 
     Public Sub Destroy() Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Destroy
@@ -23,7 +23,7 @@
     End Sub
 
     Private ReadOnly store As IEntityStore(Of TEntityIdentifier, TYokeIdentifier)
-    Public ReadOnly Property Identifier As TEntityIdentifier Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Identifier
+    Private ReadOnly Identifier As TEntityIdentifier
 
     Public ReadOnly Property EntityType As String Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).EntityType
         Get
@@ -127,7 +127,7 @@
         If other Is Nothing Then
             Return False
         End If
-        Return other.Identifier.Equals(Identifier)
+        Return CType(other, Entity(Of TEntityIdentifier, TYokeIdentifier)).Identifier.Equals(Identifier)
     End Function
 
     Public Overrides Function GetHashCode() As Integer
