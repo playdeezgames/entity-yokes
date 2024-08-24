@@ -4,6 +4,7 @@
     Private ReadOnly entityFlags As New Dictionary(Of TEntityIdentifier, HashSet(Of String))
     Private ReadOnly yokeFlags As New Dictionary(Of TYokeIdentifier, HashSet(Of String))
     Private ReadOnly entityMetadatas As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, String))
+    Private ReadOnly yokeMetadatas As New Dictionary(Of TYokeIdentifier, Dictionary(Of String, String))
     Private ReadOnly entityCounters As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, Integer))
     Private ReadOnly entityStatistics As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, Double))
     Private ReadOnly nextEntityIdentifier As Func(Of TEntityIdentifier)
@@ -262,4 +263,38 @@
             flags.Remove(flagType)
         End If
     End Sub
+
+    Public Sub WriteYokeMetadata(identifier As TYokeIdentifier, metadataType As String, value As String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).WriteYokeMetadata
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        If Not yokeMetadatas.TryGetValue(identifier, metadatas) Then
+            metadatas = New Dictionary(Of String, String)
+            yokeMetadatas(identifier) = metadatas
+        End If
+        metadatas(metadataType) = value
+    End Sub
+
+    Public Sub ClearYokeMetadata(identifier As TYokeIdentifier, metadataType As String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ClearYokeMetadata
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        If yokeMetadatas.TryGetValue(identifier, metadatas) Then
+            metadatas.Remove(metadataType)
+        End If
+    End Sub
+
+    Public Function ReadYokeMetadata(identifier As TYokeIdentifier, metadataType As String) As String Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeMetadata
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        Dim value As String = Nothing
+        If yokeMetadatas.TryGetValue(identifier, metadatas) AndAlso
+            metadatas.TryGetValue(metadataType, value) Then
+            Return value
+        End If
+        Return Nothing
+    End Function
+
+    Public Function ListYokeMetadatas(identifier As TYokeIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListYokeMetadatas
+        Dim metadatas As Dictionary(Of String, String) = Nothing
+        If yokeMetadatas.TryGetValue(identifier, metadatas) Then
+            Return metadatas.Keys
+        End If
+        Return Array.Empty(Of String)
+    End Function
 End Class

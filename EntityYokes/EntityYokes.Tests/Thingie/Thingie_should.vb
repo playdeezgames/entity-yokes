@@ -47,6 +47,21 @@ Public MustInherit Class Thingie_should(Of TThingie As IThingie)
         sut.Metadata(MetadataType).ShouldBeNull
     End Sub
     <Fact>
+    Sub set_metadata()
+        Dim sut As TThingie = CreateSut()
+        Const value = "value"
+        sut.Metadata(MetadataType) = value
+        sut.Metadata(MetadataType).ShouldBe(value)
+        sut.Metadatas.ShouldHaveSingleItem
+        Const otherValue = "other value"
+        sut.Metadata(MetadataType) = otherValue
+        sut.Metadata(MetadataType).ShouldBe(otherValue)
+        sut.Metadatas.ShouldHaveSingleItem
+        sut.Metadata(MetadataType) = Nothing
+        sut.Metadata(MetadataType).ShouldBeNull
+        sut.Metadatas.ShouldBeEmpty
+    End Sub
+    <Fact>
     Sub initially_have_no_counters()
         Dim sut As TThingie = CreateSut()
         sut.Counters.ShouldBeEmpty

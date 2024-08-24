@@ -3,25 +3,10 @@ Imports Xunit
 
 Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
     Inherits Thingie_should(Of IEntity(Of TEntityIdentifier, TYokeIdentifier))
-    Const FlagType = "flag-type"
+
     Const MetadataType = "metadata-type"
     Const CounterType = "counter-type"
     Const StatisticType = "statistic-type"
-    <Fact>
-    Sub set_metadata()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        Const value = "value"
-        sut.Metadata(MetadataType) = value
-        sut.Metadata(MetadataType).ShouldBe(value)
-        sut.Metadatas.ShouldHaveSingleItem
-        Const otherValue = "other value"
-        sut.Metadata(MetadataType) = otherValue
-        sut.Metadata(MetadataType).ShouldBe(otherValue)
-        sut.Metadatas.ShouldHaveSingleItem
-        sut.Metadata(MetadataType) = Nothing
-        sut.Metadata(MetadataType).ShouldBeNull
-        sut.Metadatas.ShouldBeEmpty
-    End Sub
     <Fact>
     Sub set_counter()
         Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()

@@ -50,16 +50,20 @@
 
     Public Property Metadata(metadataType As String) As String Implements IThingie.Metadata
         Get
-            Return Nothing
+            Return store.ReadYokeMetadata(identifier, metadataType)
         End Get
         Set(value As String)
-            Throw New NotImplementedException()
+            If value IsNot Nothing Then
+                store.WriteYokeMetadata(identifier, metadataType, value)
+            Else
+                store.ClearYokeMetadata(identifier, metadataType)
+            End If
         End Set
     End Property
 
     Public ReadOnly Property Metadatas As IEnumerable(Of String) Implements IThingie.Metadatas
         Get
-            Return Array.Empty(Of String)
+            Return store.ListYokeMetadatas(identifier)
         End Get
     End Property
 
