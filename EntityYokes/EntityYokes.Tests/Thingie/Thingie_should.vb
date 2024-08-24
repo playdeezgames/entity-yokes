@@ -29,6 +29,18 @@ Public MustInherit Class Thingie_should(Of TThingie As IThingie)
         sut.Flags.ShouldBeEmpty
     End Sub
     <Fact>
+    Sub retrieve_all_flags()
+        Dim sut As TThingie = CreateSut()
+        Const FirstFlagType = "first-flag"
+        Const SecondFlagType = "second-flag"
+        sut.Flag(FirstFlagType) = True
+        sut.Flag(SecondFlagType) = True
+        Dim actual = sut.Flags
+        actual.Count.ShouldBe(2)
+        actual.ShouldContain(FirstFlagType)
+        actual.ShouldContain(SecondFlagType)
+    End Sub
+    <Fact>
     Sub initially_have_no_metadatas()
         Dim sut As TThingie = CreateSut()
         sut.Metadatas.ShouldBeEmpty

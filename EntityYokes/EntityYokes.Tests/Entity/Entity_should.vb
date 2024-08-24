@@ -53,18 +53,6 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         sut.Statistics.ShouldBeEmpty
     End Sub
     <Fact>
-    Sub retrieve_all_flags()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        Const FirstFlagType = "first-flag"
-        Const SecondFlagType = "second-flag"
-        sut.Flag(FirstFlagType) = True
-        sut.Flag(SecondFlagType) = True
-        Dim actual = sut.Flags
-        actual.Count.ShouldBe(2)
-        actual.ShouldContain(FirstFlagType)
-        actual.ShouldContain(SecondFlagType)
-    End Sub
-    <Fact>
     Sub yoke_to_another_entity()
         Dim repository = CreateRepository()
         Dim firstEntity = repository.CreateEntity(EntityType)
