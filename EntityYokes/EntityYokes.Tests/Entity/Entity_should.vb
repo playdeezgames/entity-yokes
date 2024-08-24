@@ -48,38 +48,38 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
     End Sub
     <Fact>
     Sub not_destroy_entities_with_flags()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
-        Dim entity = sut.CreateEntity(EntityType)
-        entity.Flag("flag-type") = True
-        Should.Throw(Of InvalidOperationException)(Sub() entity.Destroy())
+        Dim repository As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
+        Dim sut = repository.CreateEntity(EntityType)
+        sut.Flag("flag-type") = True
+        Should.Throw(Of InvalidOperationException)(Sub() sut.Destroy())
     End Sub
     <Fact>
     Sub not_destroy_entities_with_metadata()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
-        Dim entity = sut.CreateEntity(EntityType)
-        entity.Metadata("metadata-type") = "value"
-        Should.Throw(Of InvalidOperationException)(Sub() entity.Destroy())
+        Dim repository As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
+        Dim sut = repository.CreateEntity(EntityType)
+        sut.Metadata("metadata-type") = "value"
+        Should.Throw(Of InvalidOperationException)(Sub() sut.Destroy())
     End Sub
     <Fact>
     Sub not_destroy_entities_with_counter()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
-        Dim entity = sut.CreateEntity(EntityType)
-        entity.Counter("counter-type") = 1
-        Should.Throw(Of InvalidOperationException)(Sub() entity.Destroy())
+        Dim repository As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
+        Dim sut = repository.CreateEntity(EntityType)
+        sut.Counter("counter-type") = 1
+        Should.Throw(Of InvalidOperationException)(Sub() sut.Destroy())
     End Sub
     <Fact>
     Sub not_destroy_entities_with_statistic()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
-        Dim entity = sut.CreateEntity(EntityType)
-        entity.Statistic("statistic-type") = 1.0
-        Should.Throw(Of InvalidOperationException)(Sub() entity.Destroy())
+        Dim repository As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
+        Dim sut = repository.CreateEntity(EntityType)
+        sut.Statistic("statistic-type") = 1.0
+        Should.Throw(Of InvalidOperationException)(Sub() sut.Destroy())
     End Sub
     <Fact>
     Sub not_destroy_entities_with_yokes()
-        Dim sut As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
-        Dim entity = sut.CreateEntity(EntityType)
-        Dim yoke = entity.CreateYoke("yoke-type", entity)
-        Should.Throw(Of InvalidOperationException)(Sub() entity.Destroy())
+        Dim repository As IEntityRepository(Of TEntityIdentifier, TYokeIdentifier) = CreateRepository()
+        Dim sut = repository.CreateEntity(EntityType)
+        Dim yoke = sut.CreateYoke("yoke-type", sut)
+        Should.Throw(Of InvalidOperationException)(Sub() sut.Destroy())
     End Sub
     Const EntityType = "entity-type"
     Protected Overrides Function CreateSut() As IEntity(Of TEntityIdentifier, TYokeIdentifier)
