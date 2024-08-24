@@ -121,4 +121,16 @@
             Return store.ListEntityYokesTo(Identifier).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
         End Get
     End Property
+
+    Public Overrides Function Equals(obj As Object) As Boolean
+        Dim other As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CType(obj, IEntity(Of TEntityIdentifier, TYokeIdentifier))
+        If other Is Nothing Then
+            Return False
+        End If
+        Return other.Identifier.Equals(Identifier)
+    End Function
+
+    Public Overrides Function GetHashCode() As Integer
+        Return Identifier.GetHashCode
+    End Function
 End Class
