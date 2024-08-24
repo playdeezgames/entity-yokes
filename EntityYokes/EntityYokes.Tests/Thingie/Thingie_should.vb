@@ -20,6 +20,15 @@ Public MustInherit Class Thingie_should(Of TThingie As IThingie)
         sut.Flags.ShouldHaveSingleItem
     End Sub
     <Fact>
+    Sub clear_a_flag()
+        Dim sut As TThingie = CreateSut()
+        sut.Flag(FlagType) = True
+        sut.Flag(FlagType).ShouldBeTrue
+        sut.Flag(FlagType) = False
+        sut.Flag(FlagType).ShouldBeFalse
+        sut.Flags.ShouldBeEmpty
+    End Sub
+    <Fact>
     Sub initially_have_no_metadatas()
         Dim sut As TThingie = CreateSut()
         sut.Metadatas.ShouldBeEmpty

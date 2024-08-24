@@ -43,7 +43,7 @@
             If value Then
                 store.SetYokeFlag(identifier, flagType)
             Else
-                Throw New NotImplementedException
+                store.ClearYokeFlag(identifier, flagType)
             End If
         End Set
     End Property

@@ -255,4 +255,11 @@
         End If
         Return flags.Contains(flagType)
     End Function
+
+    Public Sub ClearYokeFlag(identifier As TYokeIdentifier, flagType As String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ClearYokeFlag
+        Dim flags As HashSet(Of String) = Nothing
+        If yokeFlags.TryGetValue(identifier, flags) Then
+            flags.Remove(flagType)
+        End If
+    End Sub
 End Class

@@ -9,6 +9,7 @@
     Sub ClearEntityCounter(identifier As TEntityIdentifier, counterType As String)
     Sub ClearEntityStatistic(identifier As TEntityIdentifier, statisticType As String)
     Sub SetYokeFlag(identifier As TYokeIdentifier, flagType As String)
+    Sub ClearYokeFlag(identifier As TYokeIdentifier, flagType As String)
     Function CreateEntity(entityType As String) As TEntityIdentifier
     Function CreateYoke(yokeType As String, fromIdentifier As TEntityIdentifier, toIdentifier As TEntityIdentifier) As TYokeIdentifier
     Function ListEntities() As IEnumerable(Of TEntityIdentifier)
