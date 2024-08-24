@@ -10,6 +10,18 @@
         Return New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, store.CreateYoke(yokeType, Me.Identifier, yokedEntity.Identifier))
     End Function
 
+    Public Sub Destroy() Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Destroy
+        If store.ListEntityCounters(Identifier).Any OrElse
+            store.ListEntityFlags(Identifier).Any OrElse
+            store.ListEntityMetadatas(Identifier).Any OrElse
+            store.ListEntityStatistics(Identifier).Any OrElse
+            store.ListEntityYokesFrom(Identifier).Any OrElse
+            store.ListEntityYokesTo(Identifier).Any Then
+            Throw New InvalidOperationException($"Entity with identifier `{Identifier}` is not empty.")
+        End If
+        store.DestroyEntity(Identifier)
+    End Sub
+
     Private ReadOnly store As IEntityStore(Of TEntityIdentifier, TYokeIdentifier)
     Public ReadOnly Property Identifier As TEntityIdentifier Implements IEntity(Of TEntityIdentifier, TYokeIdentifier).Identifier
 

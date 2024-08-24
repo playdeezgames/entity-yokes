@@ -53,15 +53,15 @@
     - [x] Update metadata
     - [x] List metadata keys
     - [x] Clear metadata
-- [ ] Yokes have counters
-    - [ ] Set counter
-    - [ ] Read counter
-    - [ ] Update counter
-    - [ ] List counter keys
-    - [ ] Clear counter
-- [ ] Yokes have statistics
-    - [ ] Set statistic
-    - [ ] Read statistic
-    - [ ] Update statistic
-    - [ ] List statistic keys
-    - [ ] Clear statistic
+- [x] Yokes have counters
+    - [x] Set counter
+    - [x] Read counter
+    - [x] Update counter
+    - [x] List counter keys
+    - [x] Clear counter
+- [x] Yokes have statistics
+    - [x] Set statistic
+    - [x] Read statistic
+    - [x] Update statistic
+    - [x] List statistic keys
+    - [x] Clear statistic

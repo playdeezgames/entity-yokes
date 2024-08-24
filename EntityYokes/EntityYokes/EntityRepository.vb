@@ -12,18 +12,6 @@
         End Get
     End Property
 
-    Public Sub DestroyEntity(entity As IEntity(Of TEntityIdentifier, TYokeIdentifier)) Implements IEntityRepository(Of TEntityIdentifier, TYokeIdentifier).DestroyEntity
-        If store.ListEntityCounters(entity.Identifier).Any OrElse
-            store.ListEntityFlags(entity.Identifier).Any OrElse
-            store.ListEntityMetadatas(entity.Identifier).Any OrElse
-            store.ListEntityStatistics(entity.Identifier).Any OrElse
-            store.ListEntityYokesFrom(entity.Identifier).Any OrElse
-            store.ListEntityYokesTo(entity.Identifier).Any Then
-            Throw New InvalidOperationException($"Entity with identifier `{entity.Identifier}` is not empty.")
-        End If
-        store.DestroyEntity(entity.Identifier)
-    End Sub
-
     Public Function CreateEntity(entityType As String) As IEntity(Of TEntityIdentifier, TYokeIdentifier) Implements IEntityRepository(Of TEntityIdentifier, TYokeIdentifier).CreateEntity
         If entityType Is Nothing Then
             Throw New ArgumentNullException(NameOf(entityType))
