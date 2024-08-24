@@ -2,6 +2,7 @@
     Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier)
     Private ReadOnly entityTypes As New Dictionary(Of TEntityIdentifier, String)
     Private ReadOnly entityFlags As New Dictionary(Of TEntityIdentifier, HashSet(Of String))
+    Private ReadOnly yokeFlags As New Dictionary(Of TYokeIdentifier, HashSet(Of String))
     Private ReadOnly entityMetadatas As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, String))
     Private ReadOnly entityCounters As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, Integer))
     Private ReadOnly entityStatistics As New Dictionary(Of TEntityIdentifier, Dictionary(Of String, Double))
@@ -228,5 +229,30 @@
 
     Public Function ReadYokeToIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ReadYokeToIdentifier
         Return yokeData(identifier).ToIdentifier
+    End Function
+
+    Public Sub SetYokeFlag(identifier As TYokeIdentifier, flagType As String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).SetYokeFlag
+        Dim flags As HashSet(Of String) = Nothing
+        If Not yokeFlags.TryGetValue(identifier, flags) Then
+            flags = New HashSet(Of String)
+            yokeFlags(identifier) = flags
+        End If
+        flags.Add(flagType)
+    End Sub
+
+    Public Function ListYokeFlags(identifier As TYokeIdentifier) As IEnumerable(Of String) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListYokeFlags
+        Dim flags As HashSet(Of String) = Nothing
+        If Not yokeFlags.TryGetValue(identifier, flags) Then
+            Return Array.Empty(Of String)
+        End If
+        Return flags
+    End Function
+
+    Public Function CheckYokeHasFlag(identifier As TYokeIdentifier, flagType As String) As Boolean Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).CheckYokeHasFlag
+        Dim flags As HashSet(Of String) = Nothing
+        If Not yokeFlags.TryGetValue(identifier, flags) Then
+            Return False
+        End If
+        Return flags.Contains(flagType)
     End Function
 End Class

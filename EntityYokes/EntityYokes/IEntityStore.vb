@@ -8,6 +8,7 @@
     Sub ClearEntityMetadata(identifier As TEntityIdentifier, metadataType As String)
     Sub ClearEntityCounter(identifier As TEntityIdentifier, counterType As String)
     Sub ClearEntityStatistic(identifier As TEntityIdentifier, statisticType As String)
+    Sub SetYokeFlag(identifier As TYokeIdentifier, flagType As String)
     Function CreateEntity(entityType As String) As TEntityIdentifier
     Function CreateYoke(yokeType As String, fromIdentifier As TEntityIdentifier, toIdentifier As TEntityIdentifier) As TYokeIdentifier
     Function ListEntities() As IEnumerable(Of TEntityIdentifier)
@@ -27,4 +28,6 @@
     Function ReadYokeType(identifier As TYokeIdentifier) As String
     Function ReadYokeFromIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier
     Function ReadYokeToIdentifier(identifier As TYokeIdentifier) As TEntityIdentifier
+    Function ListYokeFlags(identifier As TYokeIdentifier) As IEnumerable(Of String)
+    Function CheckYokeHasFlag(identifier As TYokeIdentifier, flagType As String) As Boolean
 End Interface

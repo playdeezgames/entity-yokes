@@ -31,16 +31,20 @@
 
     Public ReadOnly Property Flags As IEnumerable(Of String) Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Flags
         Get
-            Return Array.Empty(Of String)
+            Return store.ListYokeFlags(identifier)
         End Get
     End Property
 
     Public Property Flag(flagType As String) As Boolean Implements IYoke(Of TEntityIdentifier, TYokeIdentifier).Flag
         Get
-            Return False
+            Return store.CheckYokeHasFlag(identifier, flagType)
         End Get
         Set(value As Boolean)
-            Throw New NotImplementedException()
+            If value Then
+                store.SetYokeFlag(identifier, flagType)
+            Else
+                Throw New NotImplementedException
+            End If
         End Set
     End Property
 

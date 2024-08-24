@@ -53,12 +53,6 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         sut.Statistics.ShouldBeEmpty
     End Sub
     <Fact>
-    Sub set_a_flag()
-        Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
-        sut.Flag(FlagType) = True
-        sut.Flag(FlagType).ShouldBeTrue
-    End Sub
-    <Fact>
     Sub retrieve_all_flags()
         Dim sut As IEntity(Of TEntityIdentifier, TYokeIdentifier) = CreateSut()
         Const FirstFlagType = "first-flag"
