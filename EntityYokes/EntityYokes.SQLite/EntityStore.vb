@@ -10,6 +10,10 @@ Public Class EntityStore
     Const EntityFlagsTableName = "entity_flags"
     Const FlagTypeColumnName = "flag_type"
 
+    Const EntityCountersTableName = "entity_counters"
+    Const CounterTypeColumnName = "counter_type"
+    Const ValueColumnName = "value"
+
     Private ReadOnly connection As SqliteConnection
     Sub New(connection As SqliteConnection)
         Me.connection = connection
@@ -65,7 +69,48 @@ CREATE TABLE IF NOT EXISTS `{EntityFlagsTableName}`
     End Sub
 
     Public Sub WriteEntityCounter(identifier As Integer, counterType As String, value As Integer) Implements IEntityStore(Of Integer, Integer).WriteEntityCounter
-        Throw New NotImplementedException()
+        CreateEntityCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT INTO `{EntityCountersTableName}`
+(
+    `{EntityIdColumnName}`,
+    `{CounterTypeColumnName}`,
+    `{ValueColumnName}`
+) 
+VALUES
+(
+    @{EntityIdColumnName},
+    @{CounterTypeColumnName},
+    @{ValueColumnName}
+) 
+ON CONFLICT DO
+    UPDATE 
+    SET 
+        `{ValueColumnName}`=@{ValueColumnName} 
+    WHERE 
+        `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+        `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
+            command.Parameters.AddWithValue($"@{ValueColumnName}", value)
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub CreateEntityCountersTable()
+        CreateEntityTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{EntityCountersTableName}`
+(
+    `{EntityIdColumnName}` INTEGER NOT NULL,
+    `{CounterTypeColumnName}` TEXT NOT NULL,
+    `{ValueColumnName}` INTEGER NOT NULL,
+    UNIQUE(`{EntityIdColumnName}`,`{CounterTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub WriteEntityStatistic(identifier As Integer, statisticType As String, value As Double) Implements IEntityStore(Of Integer, Integer).WriteEntityStatistic
