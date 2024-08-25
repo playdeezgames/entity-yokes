@@ -1,6 +1,7 @@
 # Entity Yokes
 
-- [ ] 20240824 Entity Yokes Episode 4 - 
+- [ ] 20240825 Entity Yokes Episode 5 - 
+- [x] 20240824 Entity Yokes Episode 4 - 
 - [x] 20240821 Entity Yokes Episode 3 - 
 - [x] 20240819 Entity Yokes Episode 2 - 
 - [x] 20240818 Entity Yokes Episode 1 - 
