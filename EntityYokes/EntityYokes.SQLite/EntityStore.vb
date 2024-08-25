@@ -3,7 +3,7 @@ Imports Microsoft.Data.Sqlite
 
 Public Class EntityStore
     Implements IEntityStore(Of Integer, Integer)
-    Const EntityTableName = "entities"
+    Const EntitiesTableName = "entities"
     Const EntityIdColumnName = "entity_id"
     Const EntityTypeColumnName = "entity_type"
 
@@ -14,24 +14,30 @@ Public Class EntityStore
     Const CounterTypeColumnName = "counter_type"
     Const ValueColumnName = "value"
 
+    Const YokesTableName = "yokes"
+    Const YokeIdColumnName = "yoke_id"
+    Const YokeTypeColumnName = "yoke_type"
+    Const FromEntityIdColumnName = "from_entity_id"
+    Const ToEntityIdColumnName = "to_entity_id"
+
     Private ReadOnly connection As SqliteConnection
     Sub New(connection As SqliteConnection)
         Me.connection = connection
     End Sub
 
     Public Sub DestroyEntity(identifier As Integer) Implements IEntityStore(Of Integer, Integer).DestroyEntity
-        CreateEntityTable()
+        CreateEntitiesTable()
         Using command = connection.CreateCommand()
-            command.CommandText = $"DELETE FROM `{EntityTableName}` WHERE `{EntityTypeColumnName}`=@{EntityTypeColumnName};"
+            command.CommandText = $"DELETE FROM `{EntitiesTableName}` WHERE `{EntityTypeColumnName}`=@{EntityTypeColumnName};"
             command.Parameters.AddWithValue($"@{EntityTypeColumnName}", identifier)
             command.ExecuteNonQuery()
         End Using
     End Sub
 
-    Private Sub CreateEntityTable()
+    Private Sub CreateEntitiesTable()
         Using command = connection.CreateCommand()
             command.CommandText = $"
-CREATE TABLE IF NOT EXISTS `{EntityTableName}`
+CREATE TABLE IF NOT EXISTS `{EntitiesTableName}`
 (
     `{EntityIdColumnName}` INTEGER PRIMARY KEY AUTOINCREMENT,
     `{EntityTypeColumnName}` TEXT NOT NULL
@@ -46,14 +52,14 @@ CREATE TABLE IF NOT EXISTS `{EntityTableName}`
     End Sub
 
     Private Sub CreateEntityFlagTable()
-        CreateEntityTable()
+        CreateEntitiesTable()
         Using command = connection.CreateCommand
             command.CommandText = $"
 CREATE TABLE IF NOT EXISTS `{EntityFlagsTableName}`
 (
     `{EntityIdColumnName}` INTEGER NOT NULL,
     `{FlagTypeColumnName}` TEXT NOT NULL,
-    FOREIGN KEY(`{EntityIdColumnName}`) REFERENCES `{EntityTableName}`(`{EntityIdColumnName}`),
+    FOREIGN KEY(`{EntityIdColumnName}`) REFERENCES `{EntitiesTableName}`(`{EntityIdColumnName}`),
     PRIMARY KEY(`{EntityIdColumnName}`,`{FlagTypeColumnName}`)
 );"
             command.ExecuteNonQuery()
@@ -99,7 +105,7 @@ ON CONFLICT DO
     End Sub
 
     Private Sub CreateEntityCountersTable()
-        CreateEntityTable()
+        CreateEntitiesTable()
         Using command = connection.CreateCommand
             command.CommandText = $"
 CREATE TABLE IF NOT EXISTS `{EntityCountersTableName}`
@@ -166,17 +172,54 @@ CREATE TABLE IF NOT EXISTS `{EntityCountersTableName}`
     End Sub
 
     Public Function CreateEntity(entityType As String) As Integer Implements IEntityStore(Of Integer, Integer).CreateEntity
-        CreateEntityTable()
+        CreateEntitiesTable()
         Using command = connection.CreateCommand
-            command.CommandText = $"INSERT INTO `{EntityTableName}`(`{EntityTypeColumnName}`) VALUES (@{EntityTypeColumnName}) RETURNING `{EntityIdColumnName}`;"
+            command.CommandText = $"INSERT INTO `{EntitiesTableName}`(`{EntityTypeColumnName}`) VALUES (@{EntityTypeColumnName}) RETURNING `{EntityIdColumnName}`;"
             command.Parameters.AddWithValue($"@{EntityTypeColumnName}", entityType)
             Return CInt(command.ExecuteScalar)
         End Using
     End Function
 
     Public Function CreateYoke(yokeType As String, fromIdentifier As Integer, toIdentifier As Integer) As Integer Implements IEntityStore(Of Integer, Integer).CreateYoke
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT INTO `{YokesTableName}`
+(
+    `{YokeTypeColumnName}`,
+    `{FromEntityIdColumnName}`,
+    `{ToEntityIdColumnName}`
+) 
+VALUES
+(
+    @{YokeTypeColumnName},
+    @{FromEntityIdColumnName},
+    @{ToEntityIdColumnName}) 
+RETURNING 
+    `{YokeIdColumnName}`;"
+            command.Parameters.AddWithValue($"@{YokeTypeColumnName}", yokeType)
+            command.Parameters.AddWithValue($"@{FromEntityIdColumnName}", fromIdentifier)
+            command.Parameters.AddWithValue($"@{ToEntityIdColumnName}", toIdentifier)
+            Return CInt(command.ExecuteScalar())
+        End Using
     End Function
+
+    Private Sub CreateYokesTable()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{YokesTableName}`
+(
+    `{YokeIdColumnName}` INTEGER PRIMARY KEY AUTOINCREMENT,
+    `{YokeTypeColumnName}` TEXT NOT NULL,
+    `{FromEntityIdColumnName}` INTEGER NOT NULL,
+    `{ToEntityIdColumnName}` INTEGER NOT NULL,
+    FOREIGN KEY (`{FromEntityIdColumnName}`) REFERENCES `{EntitiesTableName}`(`{EntityIdColumnName}`),
+    FOREIGN KEY (`{ToEntityIdColumnName}`) REFERENCES `{EntitiesTableName}`(`{EntityIdColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
 
     Public Function ListEntities() As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntities
         Throw New NotImplementedException()
