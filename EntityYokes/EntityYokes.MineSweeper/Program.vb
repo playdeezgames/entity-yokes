@@ -1,12 +1,14 @@
 Imports System.IO
 Imports EntityYokes.SQLite
 Imports Microsoft.Data.Sqlite
+Imports System.Linq
 
 Module Program
     Const BoardEntityType = "board"
     Const BoardColumnEntityType = "board-column"
     Const BoardCellEntityType = "board-cell"
     Const ContainsYokeType = "contains"
+    Const NeighborsYokeType = "neighbors"
     Const ColumnsCounterType = "columns"
     Const ColumnCounterType = "column"
     Const RowsCounterType = "rows"
@@ -24,6 +26,50 @@ Module Program
     Private Sub InitializeGameData(repository As IEntityRepository)
         Dim boardEntity As IEntity = CreateBoard(repository)
         CreateBoardColumns(repository, boardEntity)
+        YokeNeighbors(repository)
+    End Sub
+
+    Const DirectionCount = 8
+    Private ReadOnly Directions As IReadOnlyList(Of Integer) = Enumerable.Range(0, DirectionCount).ToList
+    Private ReadOnly DeltaX As IReadOnlyDictionary(Of Integer, Integer) =
+        New Dictionary(Of Integer, Integer) From
+        {
+            {0, 0},
+            {1, 1},
+            {2, 1},
+            {3, 1},
+            {4, 0},
+            {5, -1},
+            {6, -1},
+            {7, -1}
+        }
+    Private ReadOnly DeltaY As IReadOnlyDictionary(Of Integer, Integer) =
+        New Dictionary(Of Integer, Integer) From
+        {
+            {0, -1},
+            {1, -1},
+            {2, 0},
+            {3, 1},
+            {4, 1},
+            {5, 1},
+            {6, 0},
+            {7, -1}
+        }
+
+    Private Sub YokeNeighbors(repository As IEntityRepository)
+        Dim boardCells = repository.RetrieveEntitiesOfType(BoardCellEntityType)
+        For Each boardCell In boardCells
+            Dim column = boardCell.Counter(ColumnCounterType).Value
+            Dim row = boardCell.Counter(RowCounterType).Value
+            For Each direction In Directions
+                Dim nextColumn = column + DeltaX(direction)
+                Dim nextRow = row + DeltaY(direction)
+                Dim neighbor = boardCells.SingleOrDefault(Function(x) x.Counter(ColumnCounterType).Value = nextColumn AndAlso x.Counter(RowCounterType).Value = nextRow)
+                If neighbor IsNot Nothing Then
+                    boardCell.CreateYoke(NeighborsYokeType, neighbor)
+                End If
+            Next
+        Next
     End Sub
 
     Private Sub CreateBoardColumns(repository As IEntityRepository, boardEntity As IEntity)

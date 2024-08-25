@@ -234,7 +234,24 @@ CREATE TABLE IF NOT EXISTS `{YokesTableName}`
     End Function
 
     Public Function ListEntitiesOfType(entityType As String) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntitiesOfType
-        Throw New NotImplementedException()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{EntityIdColumnName}` 
+FROM 
+    `{EntitiesTableName}` 
+WHERE 
+    `{EntityTypeColumnName}` = @{EntityTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityTypeColumnName}", entityType)
+            Dim result As New List(Of Integer)
+            Using reader = command.ExecuteReader
+                While reader.Read
+                    result.Add(reader.GetInt32(0))
+                End While
+            End Using
+            Return result
+        End Using
     End Function
 
     Public Function CheckEntityHasFlag(identifier As Integer, flagType As String) As Boolean Implements IEntityStore(Of Integer, Integer).CheckEntityHasFlag
