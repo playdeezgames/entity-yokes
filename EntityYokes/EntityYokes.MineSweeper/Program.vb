@@ -1,5 +1,4 @@
 Imports System.IO
-Imports System.Threading
 Imports EntityYokes.SQLite
 Imports Microsoft.Data.Sqlite
 
@@ -12,8 +11,8 @@ Module Program
     Const ColumnCounterType = "column"
     Const RowsCounterType = "rows"
     Const RowCounterType = "row"
-    Const BoardColumns = 11
-    Const BoardRows = 13
+    Const BoardColumns = 12
+    Const BoardRows = 12
     Sub Main(args As String())
         Using connection As New SqliteConnection("Data Source=:memory:")
             Dim repository As IEntityRepository = CreateRepository(connection)
@@ -32,15 +31,16 @@ Module Program
             Dim boardColumnEntity = repository.CreateEntity(BoardColumnEntityType)
             boardColumnEntity.Counter(ColumnCounterType) = column
             boardEntity.CreateYoke(ContainsYokeType, boardColumnEntity)
-            CreateBoardRows(repository, boardColumnEntity)
+            CreateBoardCells(repository, boardColumnEntity)
         Next
     End Sub
 
-    Private Sub CreateBoardRows(repository As IEntityRepository, boardColumnEntity As IEntity)
+    Private Sub CreateBoardCells(repository As IEntityRepository, boardColumnEntity As IEntity)
         For Each row In Enumerable.Range(0, BoardRows)
             Dim boardCellEntity = repository.CreateEntity(BoardCellEntityType)
             boardCellEntity.Counter(RowCounterType) = row
             boardCellEntity.Counter(ColumnCounterType) = boardColumnEntity.Counter(ColumnCounterType)
+            boardColumnEntity.CreateYoke(ContainsYokeType, boardCellEntity)
         Next
     End Sub
 
