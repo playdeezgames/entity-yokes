@@ -262,7 +262,24 @@ CREATE TABLE IF NOT EXISTS `{YokesTableName}`
     End Function
 
     Public Function ReadEntityCounter(identifier As Integer, counterType As String) As Integer? Implements IEntityStore(Of Integer, Integer).ReadEntityCounter
-        Throw New NotImplementedException()
+        CreateEntityCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ValueColumnName}` 
+FROM 
+    `{EntityCountersTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
+            Dim result = command.ExecuteScalar
+            If result Is Nothing Then
+                Return Nothing
+            End If
+            Return CInt(result)
+        End Using
     End Function
 
     Public Function ReadEntityStatistic(identifier As Integer, statisticType As String) As Double? Implements IEntityStore(Of Integer, Integer).ReadEntityStatistic

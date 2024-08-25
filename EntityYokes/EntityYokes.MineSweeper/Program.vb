@@ -1,10 +1,12 @@
 Imports System.IO
+Imports System.Threading
 Imports EntityYokes.SQLite
 Imports Microsoft.Data.Sqlite
 
 Module Program
     Const BoardEntityType = "board"
     Const BoardColumnEntityType = "board-column"
+    Const BoardCellEntityType = "board-cell"
     Const ContainsYokeType = "contains"
     Const ColumnsCounterType = "columns"
     Const ColumnCounterType = "column"
@@ -22,10 +24,23 @@ Module Program
 
     Private Sub InitializeGameData(repository As IEntityRepository)
         Dim boardEntity As IEntity = CreateBoard(repository)
+        CreateBoardColumns(repository, boardEntity)
+    End Sub
+
+    Private Sub CreateBoardColumns(repository As IEntityRepository, boardEntity As IEntity)
         For Each column In Enumerable.Range(0, BoardColumns)
             Dim boardColumnEntity = repository.CreateEntity(BoardColumnEntityType)
             boardColumnEntity.Counter(ColumnCounterType) = column
             boardEntity.CreateYoke(ContainsYokeType, boardColumnEntity)
+            CreateBoardRows(repository, boardColumnEntity)
+        Next
+    End Sub
+
+    Private Sub CreateBoardRows(repository As IEntityRepository, boardColumnEntity As IEntity)
+        For Each row In Enumerable.Range(0, BoardRows)
+            Dim boardCellEntity = repository.CreateEntity(BoardCellEntityType)
+            boardCellEntity.Counter(RowCounterType) = row
+            boardCellEntity.Counter(ColumnCounterType) = boardColumnEntity.Counter(ColumnCounterType)
         Next
     End Sub
 
