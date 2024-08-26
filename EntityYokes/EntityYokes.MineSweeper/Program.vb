@@ -57,7 +57,7 @@ Module Program
         }
 
     Private Sub YokeNeighbors(repository As IEntityRepository)
-        Dim boardCells = repository.RetrieveEntitiesOfType(BoardCellEntityType)
+        Dim boardCells = repository.EntitiesOfType(BoardCellEntityType)
         For Each boardCell In boardCells
             Dim column = boardCell.Counter(ColumnCounterType).Value
             Dim row = boardCell.Counter(RowCounterType).Value

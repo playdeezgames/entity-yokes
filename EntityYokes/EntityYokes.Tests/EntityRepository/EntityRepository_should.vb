@@ -8,11 +8,11 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
     <InlineData("entity-type2")>
     Sub create_entity_with_identifier_and_entity_type(entityType As String)
         Dim sut As IEntityRepository = CreateSut()
-        sut.AllEntities.Count.ShouldBe(0)
+        sut.Entities.Count.ShouldBe(0)
         Dim actual = sut.CreateEntity(entityType)
         actual.ShouldNotBeNull()
         actual.EntityType.ShouldBe(entityType)
-        sut.AllEntities.Count.ShouldBe(1)
+        sut.Entities.Count.ShouldBe(1)
     End Sub
     <Fact>
     Sub blow_up_when_trying_to_create_entity_with_null_entity_type()
@@ -25,15 +25,15 @@ Public MustInherit Class EntityRepository_should(Of TEntityIdentifier, TYokeIden
         Dim firstEntity = sut.CreateEntity(EntityType)
         Dim secondEntity = sut.CreateEntity(EntityType)
         firstEntity.ShouldNotBe(secondEntity)
-        sut.AllEntities.Count.ShouldBe(2)
+        sut.Entities.Count.ShouldBe(2)
     End Sub
     <Fact>
     Sub retrieve_entities_by_entity_type()
         Dim sut As IEntityRepository = CreateSut()
-        sut.RetrieveEntitiesOfType(EntityType).Count.ShouldBe(0)
+        sut.EntitiesOfType(EntityType).Count.ShouldBe(0)
         sut.CreateEntity(EntityType)
         sut.CreateEntity(EntityType)
-        Dim actual = sut.RetrieveEntitiesOfType(EntityType)
+        Dim actual = sut.EntitiesOfType(EntityType)
         actual.Count.ShouldBe(2)
         actual.All(Function(x) x.EntityType = EntityType).ShouldBeTrue
     End Sub

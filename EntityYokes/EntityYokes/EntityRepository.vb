@@ -6,7 +6,7 @@
         Me.store = store
     End Sub
 
-    Public ReadOnly Property AllEntities As IEnumerable(Of IEntity) Implements IEntityRepository.AllEntities
+    Public ReadOnly Property Entities As IEnumerable(Of IEntity) Implements IEntityRepository.Entities
         Get
             Return store.ListEntities.Select(Function(x) New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, x))
         End Get
@@ -20,7 +20,7 @@
         Return New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, identifier)
     End Function
 
-    Public Function RetrieveEntitiesOfType(entityType As String) As IEnumerable(Of IEntity) Implements IEntityRepository.RetrieveEntitiesOfType
+    Public Function EntitiesOfType(entityType As String) As IEnumerable(Of IEntity) Implements IEntityRepository.EntitiesOfType
         Return store.ListEntitiesOfType(entityType).Select(Function(x) New Entity(Of TEntityIdentifier, TYokeIdentifier)(store, x))
     End Function
 End Class

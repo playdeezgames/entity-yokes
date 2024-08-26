@@ -41,9 +41,9 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
         Dim repository As IEntityRepository = CreateRepository()
         Dim sut = repository.CreateEntity(EntityType)
         sut.ShouldNotBeNull
-        repository.AllEntities.ShouldHaveSingleItem
+        repository.Entities.ShouldHaveSingleItem
         sut.Destroy()
-        repository.AllEntities.ShouldBeEmpty
+        repository.Entities.ShouldBeEmpty
         Should.Throw(Of NullReferenceException)(Function() sut.EntityType)
     End Sub
     <Fact>
