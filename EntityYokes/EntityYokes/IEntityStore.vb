@@ -44,4 +44,6 @@
     Function ListYokeCounters(identifier As TYokeIdentifier) As IEnumerable(Of String)
     Function ReadYokeStatistic(identifier As TYokeIdentifier, statisticType As String) As Double?
     Function ListYokeStatistics(identifier As TYokeIdentifier) As IEnumerable(Of String)
+    Function ListEntityYokesOfTypeFrom(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier)
+    Function ListEntityYokesOfTypeTo(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier)
 End Interface

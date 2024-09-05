@@ -1,6 +1,6 @@
 # Entity Yokes
 
-- [ ] 20240826 Entity Yokes Episode 6 - 
+- [ ] 20240905 Entity Yokes Episode 6 - 
 - [x] 20240825 Entity Yokes Episode 5 - 
 - [x] 20240824 Entity Yokes Episode 4 - 
 - [x] 20240821 Entity Yokes Episode 3 - 
@@ -70,7 +70,7 @@
 - [ ] Create SQLite backing store
 - [ ] Minesweeper Example
     - [ ] EntityType: Cell
-        - [ ] Counters: Column(0..Columns-1), Row(0..Rows-1)
+        - [x] Counters: Column(0..Columns-1), Row(0..Rows-1)
         - [ ] Flags: Revealed, Bomb
         - [ ] Yokes: 
             - [ ] YokeType: Neighbor

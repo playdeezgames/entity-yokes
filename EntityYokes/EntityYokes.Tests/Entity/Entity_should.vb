@@ -27,14 +27,19 @@ Public MustInherit Class Entity_should(Of TEntityIdentifier, TYokeIdentifier)
     Sub yoke_to_self()
         Dim sut As IEntity = CreateSut()
         Const YokeType = "yoke-type"
+        Const BogusYokeType = "bogus-yoke-type"
         Dim yoke = sut.CreateYoke(YokeType, sut)
         yoke.FromEntity.ShouldBe(sut)
         yoke.ToEntity.ShouldBe(sut)
         yoke.YokeType.ShouldBe(YokeType)
         sut.YokesFrom.ShouldHaveSingleItem
         sut.YokesFrom.Single.ToEntity.ShouldBe(sut)
+        sut.YokesOfTypeFrom(YokeType).ShouldHaveSingleItem
+        sut.YokesOfTypeFrom(BogusYokeType).ShouldBeEmpty
         sut.YokesTo.ShouldHaveSingleItem
         sut.YokesTo.Single.FromEntity.ShouldBe(sut)
+        sut.YokesOfTypeTo(YokeType).ShouldHaveSingleItem
+        sut.YokesOfTypeTo(BogusYokeType).ShouldBeEmpty
     End Sub
     <Fact>
     Sub destroy_itself()

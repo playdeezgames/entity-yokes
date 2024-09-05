@@ -122,6 +122,18 @@
         End Get
     End Property
 
+    Public ReadOnly Property YokesOfTypeFrom(yokeType As String) As IEnumerable(Of IYoke) Implements IEntity.YokesOfTypeFrom
+        Get
+            Return store.ListEntityYokesOfTypeFrom(Identifier, yokeType).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
+        End Get
+    End Property
+
+    Public ReadOnly Property YokesOfTypeTo(yokeType As String) As IEnumerable(Of IYoke) Implements IEntity.YokesOfTypeTo
+        Get
+            Return store.ListEntityYokesOfTypeTo(Identifier, yokeType).Select(Function(x) New Yoke(Of TEntityIdentifier, TYokeIdentifier)(store, x))
+        End Get
+    End Property
+
     Public Overrides Function Equals(obj As Object) As Boolean
         Dim other As IEntity = CType(obj, IEntity)
         If other Is Nothing Then

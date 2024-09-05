@@ -14,11 +14,22 @@ Public Class EntityStore
     Const CounterTypeColumnName = "counter_type"
     Const ValueColumnName = "value"
 
+    Const EntityMetadatasTableName = "entity_metadatas"
+    Const MetadataTypeColumnName = "metadata_type"
+
+    Const EntityStatisticsTableName = "entity_statistics"
+    Const StatisticTypeColumnName = "statistic_type"
+
     Const YokesTableName = "yokes"
     Const YokeIdColumnName = "yoke_id"
     Const YokeTypeColumnName = "yoke_type"
     Const FromEntityIdColumnName = "from_entity_id"
     Const ToEntityIdColumnName = "to_entity_id"
+
+    Const YokeFlagsTableName = "yoke_flags"
+    Const YokeMetadatasTableName = "yoke_metadatas"
+    Const YokeCountersTableName = "yoke_counters"
+    Const YokeStatisticsTableName = "yoke_statistics"
 
     Private ReadOnly connection As SqliteConnection
     Sub New(connection As SqliteConnection)
@@ -47,11 +58,26 @@ CREATE TABLE IF NOT EXISTS `{EntitiesTableName}`
     End Sub
 
     Public Sub SetEntityFlag(identifier As Integer, flagType As String) Implements IEntityStore(Of Integer, Integer).SetEntityFlag
-        CreateEntityFlagTable()
-        Throw New NotImplementedException()
+        CreateEntityFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR IGNORE INTO `{EntityFlagsTableName}`
+(
+    `{EntityIdColumnName}`,
+    `{FlagTypeColumnName}`
+) 
+VALUES
+(
+    @{EntityIdColumnName},
+    @{FlagTypeColumnName}
+);"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{FlagTypeColumnName}", flagType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
-    Private Sub CreateEntityFlagTable()
+    Private Sub CreateEntityFlagsTable()
         CreateEntitiesTable()
         Using command = connection.CreateCommand
             command.CommandText = $"
@@ -67,18 +93,48 @@ CREATE TABLE IF NOT EXISTS `{EntityFlagsTableName}`
     End Sub
 
     Public Sub ClearEntityFlag(identifier As Integer, flagType As String) Implements IEntityStore(Of Integer, Integer).ClearEntityFlag
-        Throw New NotImplementedException()
+        CreateEntityFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{EntityFlagsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{FlagTypeColumnName}`=@{FlagTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{FlagTypeColumnName}", flagType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub WriteEntityMetadata(identifier As Integer, metadataType As String, value As String) Implements IEntityStore(Of Integer, Integer).WriteEntityMetadata
-        Throw New NotImplementedException()
+        CreateEntityMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR REPLACE INTO `{EntityMetadatasTableName}`
+(
+    `{EntityIdColumnName}`,
+    `{MetadataTypeColumnName}`,
+    `{ValueColumnName}`
+) 
+VALUES
+(
+    @{EntityIdColumnName},
+    @{MetadataTypeColumnName},
+    @{ValueColumnName}
+);"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{MetadataTypeColumnName}", metadataType)
+            command.Parameters.AddWithValue($"@{ValueColumnName}", value)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub WriteEntityCounter(identifier As Integer, counterType As String, value As Integer) Implements IEntityStore(Of Integer, Integer).WriteEntityCounter
         CreateEntityCountersTable()
         Using command = connection.CreateCommand
             command.CommandText = $"
-INSERT INTO `{EntityCountersTableName}`
+INSERT OR REPLACE INTO `{EntityCountersTableName}`
 (
     `{EntityIdColumnName}`,
     `{CounterTypeColumnName}`,
@@ -89,14 +145,7 @@ VALUES
     @{EntityIdColumnName},
     @{CounterTypeColumnName},
     @{ValueColumnName}
-) 
-ON CONFLICT DO
-    UPDATE 
-    SET 
-        `{ValueColumnName}`=@{ValueColumnName} 
-    WHERE 
-        `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
-        `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
+);"
             command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
             command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
             command.Parameters.AddWithValue($"@{ValueColumnName}", value)
@@ -119,44 +168,273 @@ CREATE TABLE IF NOT EXISTS `{EntityCountersTableName}`
         End Using
     End Sub
 
+    Private Sub CreateYokeCountersTable()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{YokeCountersTableName}`
+(
+    `{YokeIdColumnName}` INTEGER NOT NULL,
+    `{CounterTypeColumnName}` TEXT NOT NULL,
+    `{ValueColumnName}` INTEGER NOT NULL,
+    UNIQUE(`{YokeIdColumnName}`,`{CounterTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub CreateEntityMetadatasTable()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{EntityMetadatasTableName}`
+(
+    `{EntityIdColumnName}` INTEGER NOT NULL,
+    `{MetadataTypeColumnName}` TEXT NOT NULL,
+    `{ValueColumnName}` TEXT NOT NULL,
+    UNIQUE(`{EntityIdColumnName}`,`{MetadataTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub CreateYokeMetadatasTable()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{YokeMetadatasTableName}`
+(
+    `{YokeIdColumnName}` INTEGER NOT NULL,
+    `{MetadataTypeColumnName}` TEXT NOT NULL,
+    `{ValueColumnName}` TEXT NOT NULL,
+    UNIQUE(`{YokeIdColumnName}`,`{MetadataTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub CreateEntityStatisticsTable()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{EntityStatisticsTableName}`
+(
+    `{EntityIdColumnName}` INTEGER NOT NULL,
+    `{StatisticTypeColumnName}` TEXT NOT NULL,
+    `{ValueColumnName}` REAL NOT NULL,
+    UNIQUE(`{EntityIdColumnName}`,`{StatisticTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub CreateYokeStatisticsTable()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{YokeStatisticsTableName}`
+(
+    `{YokeIdColumnName}` INTEGER NOT NULL,
+    `{StatisticTypeColumnName}` TEXT NOT NULL,
+    `{ValueColumnName}` REAL NOT NULL,
+    UNIQUE(`{YokeIdColumnName}`,`{StatisticTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
     Public Sub WriteEntityStatistic(identifier As Integer, statisticType As String, value As Double) Implements IEntityStore(Of Integer, Integer).WriteEntityStatistic
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR REPLACE INTO `{EntityStatisticsTableName}`
+(
+    `{EntityIdColumnName}`,
+    `{StatisticTypeColumnName}`,
+    `{ValueColumnName}`
+) 
+VALUES
+(
+    @{EntityIdColumnName},
+    @{StatisticTypeColumnName},
+    @{ValueColumnName}
+);"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{StatisticTypeColumnName}", statisticType)
+            command.Parameters.AddWithValue($"@{ValueColumnName}", value)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearEntityMetadata(identifier As Integer, metadataType As String) Implements IEntityStore(Of Integer, Integer).ClearEntityMetadata
-        Throw New NotImplementedException()
+        CreateEntityMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{EntityFlagsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{MetadataTypeColumnName}`=@{MetadataTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{MetadataTypeColumnName}", metadataType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearEntityCounter(identifier As Integer, counterType As String) Implements IEntityStore(Of Integer, Integer).ClearEntityCounter
-        Throw New NotImplementedException()
+        CreateEntityCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{EntityFlagsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearEntityStatistic(identifier As Integer, statisticType As String) Implements IEntityStore(Of Integer, Integer).ClearEntityStatistic
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{EntityFlagsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{StatisticTypeColumnName}`=@{StatisticTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{StatisticTypeColumnName}", statisticType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub SetYokeFlag(identifier As Integer, flagType As String) Implements IEntityStore(Of Integer, Integer).SetYokeFlag
-        Throw New NotImplementedException()
+        CreateYokeFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR IGNORE INTO `{YokeFlagsTableName}`
+(
+    `{YokeIdColumnName}`,
+    `{FlagTypeColumnName}`
+) 
+VALUES
+(
+    @{YokeIdColumnName},
+    @{FlagTypeColumnName}
+);"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{FlagTypeColumnName}", flagType)
+            command.ExecuteNonQuery()
+        End Using
+    End Sub
+
+    Private Sub CreateYokeFlagsTable()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+CREATE TABLE IF NOT EXISTS `{YokeFlagsTableName}`
+(
+    `{YokeIdColumnName}` INTEGER NOT NULL,
+    `{FlagTypeColumnName}` TEXT NOT NULL,
+    FOREIGN KEY(`{YokeIdColumnName}`) REFERENCES `{YokesTableName}`(`{YokeIdColumnName}`),
+    PRIMARY KEY(`{YokeIdColumnName}`,`{FlagTypeColumnName}`)
+);"
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearYokeFlag(identifier As Integer, flagType As String) Implements IEntityStore(Of Integer, Integer).ClearYokeFlag
-        Throw New NotImplementedException()
+        CreateYokeFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{YokeFlagsTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{FlagTypeColumnName}`=@{FlagTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{FlagTypeColumnName}", flagType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub WriteYokeMetadata(identifier As Integer, metadataType As String, value As String) Implements IEntityStore(Of Integer, Integer).WriteYokeMetadata
-        Throw New NotImplementedException()
+        CreateYokeMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR REPLACE INTO `{YokeMetadatasTableName}`
+(
+    `{YokeIdColumnName}`,
+    `{MetadataTypeColumnName}`,
+    `{ValueColumnName}`
+) 
+VALUES
+(
+    @{YokeIdColumnName},
+    @{MetadataTypeColumnName},
+    @{ValueColumnName}
+);"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{MetadataTypeColumnName}", metadataType)
+            command.Parameters.AddWithValue($"@{ValueColumnName}", value)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearYokeMetadata(identifier As Integer, metadataType As String) Implements IEntityStore(Of Integer, Integer).ClearYokeMetadata
-        Throw New NotImplementedException()
+        CreateYokeMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{YokeMetadatasTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{MetadataTypeColumnName}`=@{MetadataTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{MetadataTypeColumnName}", metadataType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub WriteYokeCounter(identifier As Integer, counterType As String, value As Integer) Implements IEntityStore(Of Integer, Integer).WriteYokeCounter
-        Throw New NotImplementedException()
+        CreateYokeCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR REPLACE INTO `{YokeCountersTableName}`
+(
+    `{YokeIdColumnName}`,
+    `{CounterTypeColumnName}`,
+    `{ValueColumnName}`
+) 
+VALUES
+(
+    @{YokeIdColumnName},
+    @{CounterTypeColumnName},
+    @{ValueColumnName}
+);"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
+            command.Parameters.AddWithValue($"@{ValueColumnName}", value)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearYokeCounter(identifier As Integer, counterType As String) Implements IEntityStore(Of Integer, Integer).ClearYokeCounter
-        Throw New NotImplementedException()
+        CreateYokeCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{YokeCountersTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{CounterTypeColumnName}`=@{FlagTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub WriteYokeStatistic(identifier As Integer, statisticType As String, value As Double) Implements IEntityStore(Of Integer, Integer).WriteYokeStatistic
@@ -164,7 +442,18 @@ CREATE TABLE IF NOT EXISTS `{EntityCountersTableName}`
     End Sub
 
     Public Sub ClearYokeStatistic(identifier As Integer, statisticType As String) Implements IEntityStore(Of Integer, Integer).ClearYokeStatistic
-        Throw New NotImplementedException()
+        CreateYokeStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+DELETE FROM 
+    `{YokeStatisticsTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{StatisticTypeColumnName}`=@{StatisticTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{StatisticTypeColumnName}", statisticType)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub DestroyYoke(identifier As Integer) Implements IEntityStore(Of Integer, Integer).DestroyYoke
@@ -255,7 +544,20 @@ WHERE
     End Function
 
     Public Function CheckEntityHasFlag(identifier As Integer, flagType As String) As Boolean Implements IEntityStore(Of Integer, Integer).CheckEntityHasFlag
-        Throw New NotImplementedException()
+        CreateEntityFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    COUNT(1) 
+FROM 
+    `{EntityFlagsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{FlagTypeColumnName}`=@{FlagTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{FlagTypeColumnName}", flagType)
+            Return CInt(command.ExecuteScalar) > 0
+        End Using
     End Function
 
     Public Function ListEntityFlags(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListEntityFlags
@@ -352,6 +654,14 @@ WHERE
     End Function
 
     Public Function ListYokeStatistics(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListYokeStatistics
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ListEntityYokesOfTypeFrom(identifier As Integer, yokeType As String) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntityYokesOfTypeFrom
+        Throw New NotImplementedException()
+    End Function
+
+    Public Function ListEntityYokesOfTypeTo(identifier As Integer, yokeType As String) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntityYokesOfTypeTo
         Throw New NotImplementedException()
     End Function
 End Class

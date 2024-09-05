@@ -371,4 +371,20 @@
     Public Sub DestroyYoke(identifier As TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).DestroyYoke
         Throw New NotImplementedException()
     End Sub
+
+    Public Function ListEntityYokesOfTypeFrom(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListEntityYokesOfTypeFrom
+        Dim yokes As HashSet(Of TYokeIdentifier) = Nothing
+        If Not fromYokes.TryGetValue(identifier, yokes) Then
+            Return Array.Empty(Of TYokeIdentifier)
+        End If
+        Return yokes.Where(Function(x) yokeData(x).YokeType = yokeType)
+    End Function
+
+    Public Function ListEntityYokesOfTypeTo(identifier As TEntityIdentifier, yokeType As String) As IEnumerable(Of TYokeIdentifier) Implements IEntityStore(Of TEntityIdentifier, TYokeIdentifier).ListEntityYokesOfTypeTo
+        Dim yokes As HashSet(Of TYokeIdentifier) = Nothing
+        If Not toYokes.TryGetValue(identifier, yokes) Then
+            Return Array.Empty(Of TYokeIdentifier)
+        End If
+        Return yokes.Where(Function(x) yokeData(x).YokeType = yokeType)
+    End Function
 End Class

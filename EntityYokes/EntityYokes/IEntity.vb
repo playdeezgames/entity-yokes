@@ -4,5 +4,7 @@ Public Interface IEntity
     Function CreateYoke(yokeType As String, yokedEntity As IEntity) As IYoke
     Sub Destroy()
     ReadOnly Property YokesFrom As IEnumerable(Of IYoke)
+    ReadOnly Property YokesOfTypeFrom(yokeType As String) As IEnumerable(Of IYoke)
     ReadOnly Property YokesTo As IEnumerable(Of IYoke)
+    ReadOnly Property YokesOfTypeTo(yokeType As String) As IEnumerable(Of IYoke)
 End Interface
