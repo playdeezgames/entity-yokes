@@ -39,8 +39,8 @@ Public Class EntityStore
     Public Sub DestroyEntity(identifier As Integer) Implements IEntityStore(Of Integer, Integer).DestroyEntity
         CreateEntitiesTable()
         Using command = connection.CreateCommand()
-            command.CommandText = $"DELETE FROM `{EntitiesTableName}` WHERE `{EntityTypeColumnName}`=@{EntityTypeColumnName};"
-            command.Parameters.AddWithValue($"@{EntityTypeColumnName}", identifier)
+            command.CommandText = $"DELETE FROM `{EntitiesTableName}` WHERE `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
             command.ExecuteNonQuery()
         End Using
     End Sub
@@ -271,7 +271,7 @@ VALUES
         Using command = connection.CreateCommand
             command.CommandText = $"
 DELETE FROM 
-    `{EntityFlagsTableName}` 
+    `{EntityMetadatasTableName}` 
 WHERE 
     `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
     `{MetadataTypeColumnName}`=@{MetadataTypeColumnName};"
@@ -286,7 +286,7 @@ WHERE
         Using command = connection.CreateCommand
             command.CommandText = $"
 DELETE FROM 
-    `{EntityFlagsTableName}` 
+    `{EntityCountersTableName}` 
 WHERE 
     `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
     `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
@@ -301,7 +301,7 @@ WHERE
         Using command = connection.CreateCommand
             command.CommandText = $"
 DELETE FROM 
-    `{EntityFlagsTableName}` 
+    `{EntityStatisticsTableName}` 
 WHERE 
     `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
     `{StatisticTypeColumnName}`=@{StatisticTypeColumnName};"
@@ -430,7 +430,7 @@ DELETE FROM
     `{YokeCountersTableName}` 
 WHERE 
     `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
-    `{CounterTypeColumnName}`=@{FlagTypeColumnName};"
+    `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
             command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
             command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
             command.ExecuteNonQuery()
@@ -438,7 +438,26 @@ WHERE
     End Sub
 
     Public Sub WriteYokeStatistic(identifier As Integer, statisticType As String, value As Double) Implements IEntityStore(Of Integer, Integer).WriteYokeStatistic
-        Throw New NotImplementedException()
+        CreateYokeStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+INSERT OR REPLACE INTO `{YokeStatisticsTableName}`
+(
+    `{YokeIdColumnName}`,
+    `{StatisticTypeColumnName}`,
+    `{ValueColumnName}`
+) 
+VALUES
+(
+    @{YokeIdColumnName},
+    @{StatisticTypeColumnName},
+    @{ValueColumnName}
+);"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{StatisticTypeColumnName}", statisticType)
+            command.Parameters.AddWithValue($"@{ValueColumnName}", value)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Sub ClearYokeStatistic(identifier As Integer, statisticType As String) Implements IEntityStore(Of Integer, Integer).ClearYokeStatistic
@@ -457,7 +476,12 @@ WHERE
     End Sub
 
     Public Sub DestroyYoke(identifier As Integer) Implements IEntityStore(Of Integer, Integer).DestroyYoke
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"DELETE FROM `{YokesTableName}` WHERE `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.ExecuteNonQuery()
+        End Using
     End Sub
 
     Public Function CreateEntity(entityType As String) As Integer Implements IEntityStore(Of Integer, Integer).CreateEntity
@@ -511,15 +535,47 @@ CREATE TABLE IF NOT EXISTS `{YokesTableName}`
     End Sub
 
     Public Function ListEntities() As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntities
-        Throw New NotImplementedException()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"SELECT `{EntityIdColumnName}` FROM `{EntitiesTableName}`;"
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of Integer)
+                While reader.Read
+                    result.Add(reader.GetInt32(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ReadEntityType(identifier As Integer) As String Implements IEntityStore(Of Integer, Integer).ReadEntityType
-        Throw New NotImplementedException()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{EntityTypeColumnName}` 
+FROM 
+    `{EntitiesTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            Return CStr(command.ExecuteScalar)
+        End Using
     End Function
 
     Public Function DoesEntityExist(identifier As Integer) As Boolean Implements IEntityStore(Of Integer, Integer).DoesEntityExist
-        Throw New NotImplementedException()
+        CreateEntitiesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    COUNT(1) 
+FROM 
+    `{EntitiesTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            Return CInt(command.ExecuteScalar) > 0
+        End Using
     End Function
 
     Public Function ListEntitiesOfType(entityType As String) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntitiesOfType
@@ -561,23 +617,108 @@ WHERE
     End Function
 
     Public Function ListEntityFlags(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListEntityFlags
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{FlagTypeColumnName}` 
+FROM 
+    `{EntityFlagsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ListEntityMetadatas(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListEntityMetadatas
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{MetadataTypeColumnName}` 
+FROM 
+    `{EntityMetadatasTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ListEntityCounters(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListEntityCounters
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{CounterTypeColumnName}` 
+FROM 
+    `{EntityCountersTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ListEntityStatistics(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListEntityStatistics
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{StatisticTypeColumnName}` 
+FROM 
+    `{EntityStatisticsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ReadEntityMetadata(identifier As Integer, metadataType As String) As String Implements IEntityStore(Of Integer, Integer).ReadEntityMetadata
-        Throw New NotImplementedException()
+        CreateEntityMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ValueColumnName}` 
+FROM 
+    `{EntityMetadatasTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{MetadataTypeColumnName}`=@{MetadataTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{MetadataTypeColumnName}", metadataType)
+            Dim result = command.ExecuteScalar
+            If result Is Nothing Then
+                Return Nothing
+            End If
+            Return CStr(result)
+        End Using
     End Function
 
     Public Function ReadEntityCounter(identifier As Integer, counterType As String) As Integer? Implements IEntityStore(Of Integer, Integer).ReadEntityCounter
@@ -602,66 +743,320 @@ WHERE
     End Function
 
     Public Function ReadEntityStatistic(identifier As Integer, statisticType As String) As Double? Implements IEntityStore(Of Integer, Integer).ReadEntityStatistic
-        Throw New NotImplementedException()
+        CreateEntityStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ValueColumnName}` 
+FROM 
+    `{EntityStatisticsTableName}` 
+WHERE 
+    `{EntityIdColumnName}`=@{EntityIdColumnName} AND 
+    `{StatisticTypeColumnName}`=@{StatisticTypeColumnName};"
+            command.Parameters.AddWithValue($"@{EntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{StatisticTypeColumnName}", statisticType)
+            Dim result = command.ExecuteScalar
+            If result Is Nothing Then
+                Return Nothing
+            End If
+            Return CDbl(result)
+        End Using
     End Function
 
     Public Function ListEntityYokesFrom(identifier As Integer) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntityYokesFrom
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{YokeIdColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{FromEntityIdColumnName}`=@{FromEntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{FromEntityIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of Integer)
+                While reader.Read
+                    result.Add(reader.GetInt32(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ListEntityYokesTo(identifier As Integer) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntityYokesTo
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{YokeIdColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{ToEntityIdColumnName}`=@{ToEntityIdColumnName};"
+            command.Parameters.AddWithValue($"@{ToEntityIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of Integer)
+                While reader.Read
+                    result.Add(reader.GetInt32(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ReadYokeType(identifier As Integer) As String Implements IEntityStore(Of Integer, Integer).ReadYokeType
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{YokeTypeColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Return CStr(command.ExecuteScalar)
+        End Using
     End Function
 
     Public Function ReadYokeFromIdentifier(identifier As Integer) As Integer Implements IEntityStore(Of Integer, Integer).ReadYokeFromIdentifier
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{FromEntityIdColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Return CInt(command.ExecuteScalar)
+        End Using
     End Function
 
     Public Function ReadYokeToIdentifier(identifier As Integer) As Integer Implements IEntityStore(Of Integer, Integer).ReadYokeToIdentifier
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ToEntityIdColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Return CInt(command.ExecuteScalar)
+        End Using
     End Function
 
     Public Function ListYokeFlags(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListYokeFlags
-        Throw New NotImplementedException()
+        CreateYokeFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{FlagTypeColumnName}` 
+FROM 
+    `{YokeFlagsTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function CheckYokeHasFlag(identifier As Integer, flagType As String) As Boolean Implements IEntityStore(Of Integer, Integer).CheckYokeHasFlag
-        Throw New NotImplementedException()
+        CreateYokeFlagsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    COUNT(1) 
+FROM 
+    `{YokeFlagsTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{FlagTypeColumnName}`=@{FlagTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{FlagTypeColumnName}", flagType)
+            Return CInt(command.ExecuteScalar) > 0
+        End Using
     End Function
 
     Public Function ReadYokeMetadata(identifier As Integer, metadataType As String) As String Implements IEntityStore(Of Integer, Integer).ReadYokeMetadata
-        Throw New NotImplementedException()
+        CreateYokeMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ValueColumnName}` 
+FROM 
+    `{YokeMetadatasTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{MetadataTypeColumnName}`=@{MetadataTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{MetadataTypeColumnName}", metadataType)
+            Dim result = command.ExecuteScalar
+            If result Is Nothing Then
+                Return Nothing
+            End If
+            Return CStr(result)
+        End Using
     End Function
 
     Public Function ListYokeMetadatas(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListYokeMetadatas
-        Throw New NotImplementedException()
+        CreateYokeMetadatasTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{MetadataTypeColumnName}` 
+FROM 
+    `{YokeMetadatasTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ReadYokeCounter(identifier As Integer, counterType As String) As Integer? Implements IEntityStore(Of Integer, Integer).ReadYokeCounter
-        Throw New NotImplementedException()
+        CreateYokeCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ValueColumnName}` 
+FROM 
+    `{YokeCountersTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{CounterTypeColumnName}`=@{CounterTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{CounterTypeColumnName}", counterType)
+            Dim result = command.ExecuteScalar
+            If result Is Nothing Then
+                Return Nothing
+            End If
+            Return CInt(result)
+        End Using
     End Function
 
     Public Function ListYokeCounters(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListYokeCounters
-        Throw New NotImplementedException()
+        CreateYokeCountersTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{CounterTypeColumnName}` 
+FROM 
+    `{YokeCountersTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ReadYokeStatistic(identifier As Integer, statisticType As String) As Double? Implements IEntityStore(Of Integer, Integer).ReadYokeStatistic
-        Throw New NotImplementedException()
+        CreateYokeStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{ValueColumnName}` 
+FROM 
+    `{YokeStatisticsTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName} AND 
+    `{StatisticTypeColumnName}`=@{StatisticTypeColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{StatisticTypeColumnName}", statisticType)
+            Dim result = command.ExecuteScalar
+            If result Is Nothing Then
+                Return Nothing
+            End If
+            Return CDbl(result)
+        End Using
     End Function
 
     Public Function ListYokeStatistics(identifier As Integer) As IEnumerable(Of String) Implements IEntityStore(Of Integer, Integer).ListYokeStatistics
-        Throw New NotImplementedException()
+        CreateYokeStatisticsTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{StatisticTypeColumnName}` 
+FROM 
+    `{YokeStatisticsTableName}` 
+WHERE 
+    `{YokeIdColumnName}`=@{YokeIdColumnName};"
+            command.Parameters.AddWithValue($"@{YokeIdColumnName}", identifier)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of String)
+                While reader.Read
+                    result.Add(reader.GetString(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ListEntityYokesOfTypeFrom(identifier As Integer, yokeType As String) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntityYokesOfTypeFrom
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{YokeIdColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{FromEntityIdColumnName}`=@{FromEntityIdColumnName} AND
+    `{YokeTypeColumnName}`=@{YokeTypeColumnName};"
+            command.Parameters.AddWithValue($"@{FromEntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{YokeTypeColumnName}", yokeType)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of Integer)
+                While reader.Read
+                    result.Add(reader.GetInt32(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 
     Public Function ListEntityYokesOfTypeTo(identifier As Integer, yokeType As String) As IEnumerable(Of Integer) Implements IEntityStore(Of Integer, Integer).ListEntityYokesOfTypeTo
-        Throw New NotImplementedException()
+        CreateYokesTable()
+        Using command = connection.CreateCommand
+            command.CommandText = $"
+SELECT 
+    `{YokeIdColumnName}` 
+FROM 
+    `{YokesTableName}` 
+WHERE 
+    `{ToEntityIdColumnName}`=@{ToEntityIdColumnName} AND
+    `{YokeTypeColumnName}`=@{YokeTypeColumnName};"
+            command.Parameters.AddWithValue($"@{ToEntityIdColumnName}", identifier)
+            command.Parameters.AddWithValue($"@{YokeTypeColumnName}", yokeType)
+            Using reader = command.ExecuteReader
+                Dim result As New List(Of Integer)
+                While reader.Read
+                    result.Add(reader.GetInt32(0))
+                End While
+                Return result
+            End Using
+        End Using
     End Function
 End Class
